@@ -6,6 +6,9 @@ title: about-us
 ---
 
 ### Bailey Gulsby
+![Bailey](Bailey_Profile_Img.jpg)<!-- .element height="50%" width="50%" -->
+
+My name is Bailey Gulsby, and I am studying computer science at the University of Alabama. My development experience includes my class projects and a couple of projects with Dr. Carver and the School of Social Work building web and mobile apps. Outside of software development I enjoy traveling with friends and playing Super Smash Bros. Ultimate with my roommates. I have had the chance to travel to many interesting places including New Orleans, Atlanta, Pensacola, and Tijuana. In May I will be graduating and working full-time in Huntsville, AL with 3-GIS.
 
 ### William Harders
 
