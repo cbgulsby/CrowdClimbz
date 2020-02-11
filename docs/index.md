@@ -4,7 +4,7 @@
 *add goals here*
 
 ## Deliverables
-*add link to deliverables page*
+You can view the deliverables for our project [here](https://cbgulsby.github.io/CrowdClimbz/deliverables/).
 
 ## About Us
 *add link to bio page*
