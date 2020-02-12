@@ -13,6 +13,9 @@ My name is Bailey Gulsby, and I am studying computer science at the University o
 ### William Harders
 
 ### Emma Ingram
+![Emma](emma.png)
+
+I’m a senior studying computer science, mathematics and French. During my time as a university student, I have had the opportunity to participate in an NSF-funded research project studying graph theory, study abroad in Grenoble France, and intern at both an investment bank and a hedge fund in New York City. On campus I’m a member of the Culverhouse Investment Management Group and I lead tours as an Ambassador to the College of Engineering. Since I was living in France studying French language and culture full-time last semester, this project will be an interesting opportunity to dive back into my computer science studies. When I’m not working on schoolwork or coding I enjoy playing piano and board games.
 
 ### Laura Silvashy
 ![Laura](Laura.png)<!-- .element height="50%" width="50%" -->
