@@ -11,6 +11,7 @@ title: about-us
 My name is Bailey Gulsby, and I am studying computer science at the University of Alabama. My development experience includes my class projects and a couple of projects with Dr. Carver and the School of Social Work building web and mobile apps. Outside of software development I enjoy traveling with friends and playing Super Smash Bros. Ultimate with my roommates. I have had the chance to travel to many interesting places including New Orleans, Atlanta, Pensacola, and Tijuana. In May I will be graduating and working full-time in Huntsville, AL with 3-GIS.
 
 ### William Harders
+![Will](Will.jpg)
 
 I'm Will Harders and I am a senior student in the Capstone Computing course.  I am majoring in Computer Science and Mathematics and will be graduating this spring.  Outside of my classes, I love playing tennis as well as listening to music and playing video games.  I am hoping to go into Data Science or some other field that combines Computer Science and Mathematics post-graduation.  
 
