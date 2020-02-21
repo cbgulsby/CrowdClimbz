@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { 
   View, 
   Text, 
-  SafeAreaView, 
-  StyleSheet 
+  StyleSheet, 
+  SafeAreaView 
 } from 'react-native';
 
-export default function Home({navigation}) {
+export default function Problem({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Text>Home Page</Text>
+        <Text>Problem Page</Text>
       </View>
     </SafeAreaView>
   );
