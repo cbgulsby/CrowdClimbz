@@ -1,5 +1,11 @@
 import React from 'react';
-import { SytleSheet, Text, View, Button, TextInput } from 'react-native';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    Button, 
+    TextInput 
+} from 'react-native';
 import firebase from 'react-native-firebase';
 
 export default class SignUp extends React.Component {
