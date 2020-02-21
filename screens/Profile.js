@@ -5,9 +5,50 @@ import {
     Text,
     SafeAreaView,
     Image,
-    FlatList
+    FlatList,
+    Button,
+    TouchableOpacity
 } from 'react-native';
+import ProblemCard from '../components/ProblemCard';
 
+const sampleData = [
+    {
+        id: '1',
+        problemName: 'I Hate Mondays',
+        gymLocation: 'Birmingham Boulders',
+        problemLevel: 2,
+    },
+    {
+        id: '2',
+        problemName: 'Going Up',
+        gymLocation: 'Birmingham Boulders',
+        problemLevel: 0,
+    },
+    {
+        id: '3',
+        problemName: 'Going Down',
+        gymLocation: 'High Point Birmingham',
+        problemLevel: 6,
+    },
+    {
+        id: '4',
+        problemName: 'I Hate Mondays',
+        gymLocation: 'Birmingham Boulders',
+        problemLevel: 2,
+    },
+    {
+        id: '5',
+        problemName: 'Going Up',
+        gymLocation: 'Birmingham Boulders',
+        problemLevel: 0,
+    },
+    {
+        id: '6',
+        problemName: 'Going Down',
+        gymLocation: 'High Point Birmingham',
+        problemLevel: 6,
+    },
+]
 
 export default function Profile(){
     return(
@@ -21,20 +62,38 @@ export default function Profile(){
                 </View>
                 <View style={{flex: 2}}>
                     <View style={styles.description}>
-                        <Text>Username</Text>
-                        <Text>Ability: V3 - V4</Text>
-                        <Text>Preferred Gym: Robert E. Witt Recreation Center</Text>
+                        <Text style={{color: 'white'}}>Username</Text>
+                        <Text style={{color: 'white'}}>Ability: V3 - V4</Text>
+                        <Text style={{color: 'white'}}>Preferred Gym: Robert E. Witt Recreation Center</Text>
                     </View>
                 </View>
             </View>
-            <View style={{backgroundColor: 'white', flex: 6}}>
-                <View>
 
+            <View style={{backgroundColor: 'white', flex: 6}}>
+
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                    <TouchableOpacity style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
+                        {/* <View style={{flex: 1, backgroundColor: 'blue', margin: 3}}> */}
+                            <Text style={{color: 'white', fontSize: 25}}>My Problems</Text>
+                        {/* </View> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
+                        {/* <View style={{flex: 1, backgroundColor: 'blue', margin: 3}}> */}
+                            <Text style={{color: 'white', fontSize: 25}}>Edit Profile</Text>
+                        {/* </View> */}
+                    </TouchableOpacity>
                 </View>
-                <View>
-                    <FlatList />
+
+                <View style={{flex: 9}}>
+                    <FlatList 
+                      data={sampleData}
+                      renderItem={({item}) => <ProblemCard id={item.id} name={item.problemName} />} 
+                      keyExtractor={item => item.id} 
+                    />
                 </View>
+
             </View>
+
         </SafeAreaView>
     );
 }
@@ -52,7 +111,9 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
         borderTopLeftRadius: 40,
-        borderTopRightRadius: 40
+        borderTopRightRadius: 40,
+        borderColor: 'black',
+        borderWidth: 1,
     },
     description: {
         backgroundColor: '#2576f7', 
@@ -64,7 +125,9 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 5,
         borderBottomLeftRadius: 5,
         alignContent: 'flex-start',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        borderColor: 'black',
+        borderWidth: 1,
     },
     profileBar: {
         backgroundColor: 'white', 
