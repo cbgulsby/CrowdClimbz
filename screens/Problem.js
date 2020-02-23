@@ -1,18 +1,46 @@
-import React, { Component } from 'react';
+import React, { Container } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { 
   View, 
   Text, 
-  StyleSheet, 
+  StyleSheet,
+  Button, 
   SafeAreaView 
 } from 'react-native';
+import CapturePhoto from '../screens/CapturePhoto';
+import FinishProblem from '../screens/FinishProblem';
 
-export default function Problem({navigation}) {
+const Stack = createStackNavigator();
+
+function ProblemScreen({navigation}) {
   return (
-    <SafeAreaView style={styles.container}>
+    //<SafeAreaView style={styles.container}>
       <View>
-        <Text>Problem Page</Text>
+        <Button
+        title="Take a Photo"
+        onPress={() => navigation.navigate('Take Photo')}
+        />
       </View>
-    </SafeAreaView>
+    //</SafeAreaView>
+  );
+}
+
+function MyNavigator() {
+  return (
+      <Stack.Navigator initialRouteName="Problem Screen">
+        <Stack.Screen name="Start New Problem" component={ProblemScreen} />
+        <Stack.Screen name="Finish Problem" component={FinishProblem} />
+        <Stack.Screen name="Take Photo" component={CapturePhoto} />
+      </Stack.Navigator>
+  );
+}
+
+export default function Problem(){
+  return (
+    <NavigationContainer independent={true}>
+      <MyNavigator />
+    </NavigationContainer>
   );
 }
 
