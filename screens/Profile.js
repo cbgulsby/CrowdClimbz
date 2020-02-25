@@ -27,25 +27,25 @@ const sampleData = [
         id: '3',
         problemName: 'Going Down',
         gymLocation: 'High Point Birmingham',
-        problemLevel: 6,
+        problemLevel: 5,
     },
     {
         id: '4',
-        problemName: 'I Hate Mondays',
+        problemName: 'Bottomless Fries',
         gymLocation: 'Birmingham Boulders',
-        problemLevel: 2,
+        problemLevel: 3,
     },
     {
         id: '5',
-        problemName: 'Going Up',
+        problemName: 'All Uphill From Here',
         gymLocation: 'Birmingham Boulders',
-        problemLevel: 0,
+        problemLevel: 4,
     },
     {
         id: '6',
-        problemName: 'Going Down',
+        problemName: 'Angry Monkeys',
         gymLocation: 'High Point Birmingham',
-        problemLevel: 6,
+        problemLevel: 4,
     },
 ]
 
