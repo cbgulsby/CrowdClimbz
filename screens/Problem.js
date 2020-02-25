@@ -11,6 +11,7 @@ import {
 import CapturePhoto from '../screens/CapturePhoto';
 import FinishProblem from '../screens/FinishProblem';
 import PreviewPhoto from '../screens/PreviewPhoto';
+import Home from '../screens/Home';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ function MyNavigator() {
         <Stack.Screen name="Finish Problem" component={FinishProblem} />
         <Stack.Screen name="Take Photo" component={CapturePhoto} />
         <Stack.Screen name="Preview Photo" component={PreviewPhoto} />
+        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
   );
 }

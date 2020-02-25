@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   TextInput,
   Picker,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 
 export default function FinishProblem( {navigation, route}){
@@ -17,7 +18,7 @@ export default function FinishProblem( {navigation, route}){
 
 	return(
 		<SafeAreaView style={styles.container}>
-			<View>
+			<View style={{flexDirection:'row', paddingBottom: 20, marginLeft: 10}}>
          	 	<Image 
          	 		style={{height:150, width:150}}
          	 		source={{ uri: data.uri }} 
@@ -26,11 +27,13 @@ export default function FinishProblem( {navigation, route}){
 	         	 	style={{height: 150, width: 225, borderColor: 'gray', borderWidth: 2}}
 	         		placeholder="Add description here!"
 	        	/>
+	        </View>
+	        <View style={{paddingBottom: 20, marginLeft: 15, marginRight: 15}}>
 	        	<TextInput
 	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
 	        		placeholder="Problem Name: N/A"
 	        	/>
-	        	<Picker
+	        	<Picker style={{borderColor: 'gray', borderWidth: 2}}
 	        		prompt='Choose Grade'
 	        		mode='dropdown'
 	        		style={{height: 40, width: 350}}
@@ -56,11 +59,17 @@ export default function FinishProblem( {navigation, route}){
 	  			<Picker.Item label="V15" value="v15" />
 	        	</Picker>
 	        	<TextInput
-	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
+	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2, marginBottom: 20}}
 	        		placeholder="Gym: N/A"
 	        	/>
 	        	<Button
 	        		title = "Add beta video"
+	        		style={{marginBottom: 20}}
+	        	/>
+	        	<Text></Text>
+	        	<Button
+	        		title = "Post Problem!"
+	        		onPress={() => Alert.alert("Problem Posted")}
 	        	/>
 			</View>
 		</SafeAreaView>
@@ -72,5 +81,8 @@ const styles = StyleSheet.create({
       paddingTop: 24,
       backgroundColor: '#4fb9ff',
       flex: 1
+  },
+  rowContainer: {
+  	flexDirection: 'row'
   }
 });
