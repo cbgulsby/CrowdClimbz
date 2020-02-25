@@ -10,19 +10,20 @@ import {
 } from 'react-native';
 import CapturePhoto from '../screens/CapturePhoto';
 import FinishProblem from '../screens/FinishProblem';
+import PreviewPhoto from '../screens/PreviewPhoto';
 
 const Stack = createStackNavigator();
 
 function ProblemScreen({navigation}) {
   return (
-    //<SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
         <Button
-        title="Take a Photo"
-        onPress={() => navigation.navigate('Take Photo')}
+          title="Take a Photo"
+          onPress={() => navigation.navigate('Take Photo')}
         />
       </View>
-    //</SafeAreaView>
+    </SafeAreaView>
   );
 }
 
@@ -32,6 +33,7 @@ function MyNavigator() {
         <Stack.Screen name="Start New Problem" component={ProblemScreen} />
         <Stack.Screen name="Finish Problem" component={FinishProblem} />
         <Stack.Screen name="Take Photo" component={CapturePhoto} />
+        <Stack.Screen name="Preview Photo" component={PreviewPhoto} />
       </Stack.Navigator>
   );
 }
