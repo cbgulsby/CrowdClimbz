@@ -21,7 +21,7 @@ export default class SignUp extends React.Component {
     
     render() {
         return (
-            <View>
+            <View style = { styles.container }>
                 <Text>Sign Up</Text>
                 { /*Handle errors with sign up process*/ }
                 <TextInput

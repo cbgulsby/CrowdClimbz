@@ -6,7 +6,8 @@ import {
     Button, 
     TextInput 
 } from 'react-native';
-//import firebase from 'react-native-firebase';
+
+//import firebase
 
 export default class Login extends React.Component {
     state = {
@@ -21,7 +22,7 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style = { styles.container }>
                 <Text>Login</Text>
                 { /* Handle possible errors for login */ }
                 <TextInput

@@ -1,17 +1,21 @@
 import React from 'react';
-import { createSwitchNavigator, createAppContainer } from 'react-navigation'
-import AuthenicationMenu from './AuthenticationMenu'
-import SideMenu from './SideMenu'
+import { 
+    createSwitchNavigator, 
+    createAppContainer 
+} from 'react-navigation';
+
+import AuthenticationNavigation from './AuthenticationNavigation';
+import SideMenu from './SideMenu';
 
 const AppNavigation = createAppContainer(createSwitchNavigator(
     {
         Authentication: {
-            screen: AuthenicationMenu
+            screen: AuthenticationNavigation
         },
         SideMenu: {
             screen: SideMenu
         }
     }
-))
+));
 
 export default AppNavigation;
