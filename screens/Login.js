@@ -6,7 +6,7 @@ import {
     Button, 
     TextInput 
 } from 'react-native';
-import firebase from 'react-native-firebase';
+//import firebase from 'react-native-firebase';
 
 export default class Login extends React.Component {
     state = {
@@ -15,7 +15,7 @@ export default class Login extends React.Component {
         errorMessage: null
     }
 
-    login = () => {
+    loginAuthentication = () => {
         // Firebase stuff
     }
 
@@ -23,7 +23,7 @@ export default class Login extends React.Component {
         return (
             <View>
                 <Text>Login</Text>
-                Handle possible errors
+                { /* Handle possible errors for login */ }
                 <TextInput
                     style = { styles.textInput }
                     autoCapitalize = 'none'
@@ -46,12 +46,16 @@ export default class Login extends React.Component {
                 <Button 
                     title = 'Login'
                     onPress = { 
-                        () => this.login 
+                        // () => this.loginAuthentication
+                        () => this.props.navigation.navigate('SideMenu')
                     }
                 />
                 <Button
                     title = "Don't have an account?"
                     // Handle navigation to sign up screen
+                    onPress = { 
+                        () => this.props.navigation.navigate('SignUp') 
+                    }
                 />
             </View>
         )
