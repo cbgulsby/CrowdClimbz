@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -6,7 +6,6 @@ import {
     SafeAreaView,
     Image,
     FlatList,
-    Button,
     TouchableOpacity
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
@@ -51,6 +50,9 @@ const sampleData = [
 ]
 
 export default function Profile(){
+
+    const [view, setView] = useState(0);
+
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.profileBar}>
@@ -72,24 +74,44 @@ export default function Profile(){
             <View style={{backgroundColor: 'white', flex: 6}}>
 
                 <View style={{flex: 1, flexDirection: 'row'}}>
-                    <TouchableOpacity style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
-                        {/* <View style={{flex: 1, backgroundColor: 'blue', margin: 3}}> */}
+                    <TouchableOpacity 
+                        onPress={() => {setView(1)}}
+                        style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
                             <Text style={{color: 'white', fontSize: 25}}>My Problems</Text>
-                        {/* </View> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
-                        {/* <View style={{flex: 1, backgroundColor: 'blue', margin: 3}}> */}
+                    <TouchableOpacity 
+                        onPress={() => {setView(0)}}
+                        style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
                             <Text style={{color: 'white', fontSize: 25}}>Edit Profile</Text>
-                        {/* </View> */}
                     </TouchableOpacity>
                 </View>
 
                 <View style={{flex: 9}}>
-                    <FlatList 
-                      data={sampleData}
-                      renderItem={({item}) => <ProblemCard id={item.id} name={item.problemName} />} 
-                      keyExtractor={item => item.id} 
-                    />
+                    {view ? (
+                        <FlatList 
+                            data={sampleData}
+                            renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
+                            keyExtractor={item => item.id} 
+                        />
+                    ) : (
+                        <View style={{flex: 1, backgroundColor: 'white', margin: 3}}>
+                            <TouchableOpacity style={styles.profileEditContainer}>
+                                <Text style={styles.profileEditText}>Change Climbing Ability</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.profileEditContainer}>
+                                <Text style={styles.profileEditText}>Change Preferred Gym</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.profileEditContainer}>
+                                <Text style={styles.profileEditText}>Change Password</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.profileEditContainer}>
+                                <Text style={styles.profileEditText}>Notification Preferences</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.profileEditContainer}>
+                                <Text style={styles.profileEditText}>Apply to be Moderator</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
                 </View>
 
             </View>
@@ -134,4 +156,17 @@ const styles = StyleSheet.create({
         flex: 1, 
         flexDirection: 'row'
     },
+    profileEditContainer: {
+        flex: 1, 
+        backgroundColor: '#2576f7', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        borderColor: 'black', 
+        borderWidth: 1, 
+        margin: 3
+    },
+    profileEditText: {
+        fontSize: 30, 
+        color: 'white'
+    }
 });
