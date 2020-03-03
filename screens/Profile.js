@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { 
     StyleSheet, 
     View, 
@@ -9,6 +11,11 @@ import {
     TouchableOpacity
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
+import ChangeClimbAbility from '../screens/ChangeClimbAbility';
+import ChangePreferredGym from '../screens/ChangePreferredGym';
+import ChangePassword from '../screens/ChangePassword';
+
+const Stack = createStackNavigator();
 
 const sampleData = [
     {
@@ -49,7 +56,8 @@ const sampleData = [
     },
 ]
 
-export default function Profile(){
+
+function ProfileScreen({navigation}){
 
     const [view, setView] = useState(0);
 
@@ -95,13 +103,18 @@ export default function Profile(){
                         />
                     ) : (
                         <View style={{flex: 1, backgroundColor: 'white', margin: 3}}>
-                            <TouchableOpacity style={styles.profileEditContainer}>
+                            <TouchableOpacity style={styles.profileEditContainer}
+                                onPress={() => navigation.navigate('Change Climbing Ability')}>
+                                
                                 <Text style={styles.profileEditText}>Change Climbing Ability</Text>
+
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.profileEditContainer}>
+                            <TouchableOpacity style={styles.profileEditContainer}
+                                onPress={() => navigation.navigate('Change Preferred Gym')}>
                                 <Text style={styles.profileEditText}>Change Preferred Gym</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.profileEditContainer}>
+                            <TouchableOpacity style={styles.profileEditContainer}
+                                onPress={() => navigation.navigate('Change Password')}>
                                 <Text style={styles.profileEditText}>Change Password</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.profileEditContainer}>
@@ -120,9 +133,29 @@ export default function Profile(){
     );
 }
 
+function MyNavigator() {
+  return (
+      <Stack.Navigator initialRouteName="Profile Screen">
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Change Climbing Ability" component={ChangeClimbAbility} />
+        <Stack.Screen name = "Change Preferred Gym" component={ChangePreferredGym} />
+        <Stack.Screen name = "Change Password" component={ChangePassword} />
+      </Stack.Navigator>
+  );
+}
+
+export default function Profile(){
+    return (
+        <NavigationContainer independent={true}>
+      <MyNavigator />
+    </NavigationContainer>
+        );
+
+}
+
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 24,
+        paddingTop: 16,
         backgroundColor: 'white',
         flex: 1
     },
