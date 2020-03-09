@@ -56,7 +56,7 @@ export default function SignUp({navigation}){
     const [pass, setPass] = useState('');
 
     return(
-        <View style={styles.container}>
+        <View style = { styles.container }>
             <TextInput
                 style = { styles.textInput }
                 autoCapitalize = 'none'
@@ -79,7 +79,7 @@ export default function SignUp({navigation}){
             <Button
                 title = 'Sign Up'
                 onPress = { 
-                    () => {signup(email, pass, navigation)}
+                    () => { signup(email, pass, navigation) }
                 }
             />
             <Button

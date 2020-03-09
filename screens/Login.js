@@ -24,11 +24,65 @@ import firebase from 'firebase/app';
 
 
 async function login(email, pass, navigation) {
-    
+    try {
+        await firebase.auth()
+            .signInWithEmailAndPassword(email, pass)
+            
+            .then(() => {
+                navigation.navigate('SideMenu')
+            })
+
+
+        console.log("Account logged in");
+    }
+    catch (error) {
+        console.log(error.toString())
+    }
 }
 
 export default function Login({navigation}) {
 
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
+    return(
+        <View style = { styles.container }>
+            <Text>Login</Text>
+            { /* Handle possible errors for login */}
+            <TextInput
+                style = { styles.textInput }
+                autoCapitalize = 'none'
+                placeholder = 'Email'
+                onChangeText = {
+                    (email) => setEmail(email)
+                }
+                value = { email }
+            />
+            <TextInput
+                secureTextEntry
+                style = { styles.textInput }
+                autoCapitalize = 'none'
+                placeholder = 'Password'
+                onChangeText = {
+                    (pass) => setPass(pass)
+                }
+                value = { pass }
+            />
+            <Button
+                title = 'Login'
+                onPress = {
+                    () => { login(email, pass, navigation) }
+                }
+            />
+            <Button
+                title = "Don't have an account?"
+                // Handle navigation to sign up screen
+                onPress = {
+                    () => navigation.navigate('SignUp')
+                }
+            />
+        </View>
+    );
 }
 
 
