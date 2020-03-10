@@ -6,14 +6,22 @@ import {
   StyleSheet, 
   SafeAreaView,
   TouchableOpacity,
-  Image
+  Image,
+  Camera
 } from 'react-native';
+import { RNPhotoEditor } from 'react-native-photo-editor'
+
+
 
 export default function MarkProblem({navigation, route}){
 	const {data} = route.params;
 
     console.log(data);
-
+	
+	editPhoto = () => RNPhotoEditor.Edit({
+	    path: data.uri
+	});
+	
 	return(
 		<SafeAreaView style={styles.container}>
 			<View>
@@ -26,6 +34,7 @@ export default function MarkProblem({navigation, route}){
          	<View style={{flexDirection:'row', paddingBottom:20}}>
          		<Button
          			title="Start Hold"
+         			onPress={editPhoto}
          		/>
          		<Button
          			title="Foot Hold"
