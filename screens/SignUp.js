@@ -57,6 +57,8 @@ export default function SignUp({navigation}){
 
     return(
         <View style = { styles.container }>
+            <Text>Sign Up</Text>
+            { /* Handle possible errors with sign up */ }
             <TextInput
                 style = { styles.textInput }
                 autoCapitalize = 'none'
