@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -7,9 +7,30 @@ import {
     Button,
     Alert,
 } from 'react-native';
+import { MapView, Permissions } from 'expo';
 
 export default function SearchGym(){
-    const [value, onChangeText] = React.useState('Search Gym Here');
+    const [value, onChangeText] = useState('');
+    const [position, setPosition] = useState({
+        latitude: 0,
+        longitude: 0
+    });
+    // const [latitude, setLatitude] = useState(null);
+    // const [longitude, setLongitude] = useState(null);
+
+    useEffect(() => {
+        async function getUserLocation() {
+
+            const {status} = await Permissions.getAsync(Permissions.LOCATION)
+    
+            if(status !== 'granted') {
+                const response = await Permissions.getAsync(Permissions.LOCATION)
+            }
+            // navigator.geolocation.getCurrentPosition(
+            //     ({coords: {latitude, longitude}}) => setLatitude
+            // )
+        }
+    }, [])
 
     return(
         <View style={styles.container}>
@@ -17,11 +38,16 @@ export default function SearchGym(){
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 onChangeText={text => onChangeText(text)}
                 value={value}
+                placeholder="Enter Text"
             />
-            <Button
-                title='Search'
-                color='#eb34d8'
-                onPress={() => Alert.alert('Searching: '+ value)}
+            <MapView
+                style={{flex: 1}}
+                initialRegion={{
+                    // latitude,
+                    // longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.421
+                }}
             />
         </View>
     );
