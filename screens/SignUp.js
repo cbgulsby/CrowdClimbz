@@ -6,9 +6,7 @@ import {
     Button, 
     TextInput 
 } from 'react-native';
-import firebase from 'firebase/app';
-//import firebase from 'react-native-firebase';
-// import * as firebase from 'firebase';
+import firebase from '../firebase';
 
 // firebase.initializeApp({
 // 	apiKey: "AIzaSyDfOuH54N5dKv5zqVZ3CylTZpn7y2eC9GI",
@@ -24,29 +22,32 @@ import firebase from 'firebase/app';
 
 
 async function signup(email, pass, navigation) {
+    var db = firebase.firestore();
+    var auth = firebase.auth();
     try {
-        await firebase.auth()
-            .createUserWithEmailAndPassword(email, pass)
-            // .then(() => {
-            //     firebase.auth().onAuthStateChanged(newUser => {
-            //         if(newUser) {
-            //             firebase.firestore()
-            //             .collection('gyms')
-            //             .doc(newUser.uid)
-            //             .set({
-            //                 id: newUser.uid,
-            //                 email: email
-            //             })
-            //         }
-            //     })
-            // });
+        await auth.createUserWithEmailAndPassword(email, pass)
+            .then(() => {
+                var newUser = auth.currentUser;
+                auth.onAuthStateChanged(newUser => {
+                    auth.onAuthStateChanged(newUser => {
+                        if (newUser) {
+                            db.collection('users')
+                            .doc(newUser.uid)
+                            .set({
+                                id: newUser.uid,
+                                email: email
+                            })
+                        }
+                    })
+                })
+            })
             .then(() => {
                 navigation.navigate('SideMenu')
+                console.log("Account created")
             })
-        console.log("Account created");
     }
     catch (error) {
-        console.log(error.toString())
+        console.log(error.toString());
     }
 }
 
@@ -95,59 +96,6 @@ export default function SignUp({navigation}){
     );
 }
 
-// export default class SignUp extends React.Component {
-//     state = {
-//         email: '',
-//         password: '',
-//         errorMessage: null
-//     }
-
-//     signUpAuthentication = () => {
-//         //Firebase stuff
-//     }
-    
-//     render() {
-//         return (
-//             <View style = { styles.container }>
-//                 <Text>Sign Up</Text>
-//                 { /*Handle errors with sign up process*/ }
-//                 <TextInput
-//                     style = { styles.textInput }
-//                     autoCapitalize = 'none'
-//                     placeholder = 'Email'
-//                     onChangeText = {
-//                         (email) => this.setState({ email })
-//                     }
-//                     value = { this.state.email }
-//                 />
-//                 <TextInput
-//                     secureTextEntry
-//                     style = { styles.textInput }
-//                     autoCapitalize = 'none'
-//                     placeholder = 'Password'
-//                     onChangeText = {
-//                         (password) => this.setState({ password })
-//                     }
-//                     value = { this.state.password }
-//                 />
-//                 <Button
-//                     title = 'Sign Up'
-//                     onPress = {
-//                         //() => this.signUp
-//                         () => this.props.navigation.navigate('SideMenu')
-//                     }
-//                 />
-//                 <Button
-//                     title = 'Already have an account?'
-//                     // Handle navigation to login screen
-//                     onPress = { 
-//                         () => this.props.navigation.navigate('Login') 
-//                     }
-//                 />
-//             </View>
-//         )
-//     }
-// }
 
 const styles = StyleSheet.create({
     container: {
