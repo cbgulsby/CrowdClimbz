@@ -106,12 +106,12 @@ export default function SearchGym({navigation}) {
                     <Image/>
                 </Button>
                 <TextInput
-                    style={styles.inputContainter}
+                    style={styles.inputContainer}
                     // onChangeText={text => getData(text)}
                     // onChange={(text) => {console.log(text)}}
                     onSubmitEditing={text => getData(text)}
                     // value={text}
-                    placeholder="Enter Text"
+                    placeholder="Enter City Name"
                 />
             </View>
             <MapView
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#4fb9ff',
         flex: 1
     },
-    inputContainter: {
+    inputContainer: {
         flex: 11, 
         height: 40, 
         borderColor: 'gray', 
