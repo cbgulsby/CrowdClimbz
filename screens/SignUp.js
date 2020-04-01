@@ -40,6 +40,7 @@ async function signup(email, pass, navigation) {
                         }
                     })
                 })
+                newUser.sendEmailVerification();
             })
             .then(() => {
                 navigation.navigate('SideMenu')
