@@ -7,17 +7,24 @@ import {
     TouchableOpacity,
     Button,
     Picker,
+    Alert,
 } from 'react-native';
+import firebase from '../firebase';
 
-
-var value = "Gym1";
-
-function updateGrade(val){
-
-    value = val;
-}
 
 export default function ChangePreferredGym({navigation}){
+    
+    function send(val) {
+        var dbh = firebase.firestore();
+
+        dbh.collection('gyms').doc('testgym').update({pref: val});
+        navigation.navigate('Profile');
+        Alert.alert("Preferred Gym Updated!");
+
+    }
+
+    const [selectedValue, setSelectedValue] = useState("Gym2");
+    
     return(
         <SafeAreaView style={styles.container}>
             <View>
@@ -27,7 +34,8 @@ export default function ChangePreferredGym({navigation}){
                 prompt='Choose Grade'
                 mode='dropdown'
                 style={{height: 40, width: 350}}
-                onValueChange={(itemValue, itemIndex) => updateGrade}
+                selectedValue = {selectedValue}
+                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                 >
                 <Picker.Item label="Gym1" value="Gym 1" />
                 <Picker.Item label="Gym2" value="Gym 2" />
@@ -36,6 +44,7 @@ export default function ChangePreferredGym({navigation}){
                 
                 </Picker>
 
+                <Button  title="Submit Changes" onPress={() => send(selectedValue)} />
                 <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
             </View>
 

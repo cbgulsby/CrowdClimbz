@@ -21,7 +21,7 @@ export default function ChangePassword({navigation}){
 
         dbh.collection('gyms').doc('testgym').update({name: val});
         navigation.navigate('Profile');
-        Alert.alert("Password Changed");
+        Alert.alert("Password Updated!");
 
     }
 

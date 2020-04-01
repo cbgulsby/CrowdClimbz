@@ -6,17 +6,25 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Button,
-    Picker
+    Picker,
+    Alert,
 } from 'react-native';
-
-var value = "v2";
-
-function updateGrade(val){
-
-	value = val;
-}
+import firebase from '../firebase';
 
 export default function ChangeClimbAbility({navigation}){
+    
+    function send(val) {
+        var dbh = firebase.firestore();
+
+        dbh.collection('gyms').doc('testgym').update({ability: val});
+        navigation.navigate('Profile');
+        Alert.alert("Climbing Ability Updated!");
+
+    }
+
+    const [selectedValue, setSelectedValue] = useState("V0");
+    
+
     return(
         <SafeAreaView style={styles.container}>
             <View>
@@ -25,7 +33,8 @@ export default function ChangeClimbAbility({navigation}){
 	        		prompt='Choose Grade'
 	        		mode='dropdown'
 	        		style={{height: 40, width: 350}}
-	        		onValueChange={(itemValue, itemIndex) => updateGrade}
+	        		selectedValue = {selectedValue}
+                	onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
 	  			>
 	  			<Picker.Item label="V0" value="v0" />
 	  			<Picker.Item label="V1" value="v1" />
@@ -45,6 +54,7 @@ export default function ChangeClimbAbility({navigation}){
 	  			<Picker.Item label="V15" value="v15" />
 	        	</Picker>
 
+	        	<Button  title="Submit Changes" onPress={() => send(selectedValue)} />
                 <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
             </View>
 
