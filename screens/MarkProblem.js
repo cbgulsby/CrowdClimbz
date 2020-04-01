@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  ImageBackground,
   Camera
 } from 'react-native';
 import { RNPhotoEditor } from 'react-native-photo-editor'
@@ -18,32 +19,42 @@ export default function MarkProblem({navigation, route}){
 
     console.log(data);
 	
-	editPhoto = () => RNPhotoEditor.Edit({
-	    path: data.uri
-	});
-	
+	// editPhoto = () => RNPhotoEditor.Edit({
+	//     path: data.uri
+	// });
+	// _makeStartHold(){
+	// 	console.log(data);
+	// 	<View style={styles.circle}/>
+	// }
+	// makeNormalHold = () => {
+
+	// };
+	// makeFinishHold = () => {
+
+	// };
+
 	return(
 		<SafeAreaView style={styles.container}>
 			<View>
-				<Image 
+				<ImageBackground 
          	 	style={{height: 550}}
          	 	source={{ uri: data.uri }} 
          	 	resizeMode='contain'
-         	 	/>
+         	 	>
+         	 	</ImageBackground>
          	</View>
-         	<View style={{flexDirection:'row', paddingBottom:20}}>
+         	<View style={{flexDirection:'row', paddingBottom:20, justifyContent:'center'}}>
          		<Button
          			title="Start Hold"
-         			onPress={editPhoto}
-         		/>
-         		<Button
-         			title="Foot Hold"
+         			//onPress={()=>makeStartHold()}
          		/>
          		<Button
          			title="Normal Hold"
+         			//onPress={()=>makeNormalHold()}
          		/>
          		<Button
          			title="Finish Hold"
+         			//onPress={()=>makeFinishHold()}
          		/>
          	</View>
          	<View>
@@ -61,5 +72,26 @@ const styles = StyleSheet.create({
       paddingTop: 24,
       backgroundColor: '#4fb9ff',
       flex: 1
-  }
+  },
+  startCircle: {
+	    width: 50,
+	    height: 50,
+	    borderWidth: 3,
+	    borderRadius: 100/2,
+	    borderColor: 'green'
+	},
+  middleCircle: {
+	    width: 50,
+	    height: 50,
+	    borderWidth: 3,
+	    borderRadius: 100/2,
+	    borderColor: 'blue'
+	},
+  endCircle: {
+	    width: 50,
+	    height: 50,
+	    borderWidth: 3,
+	    borderRadius: 100/2,
+	    borderColor: 'red'
+	}	
 });
