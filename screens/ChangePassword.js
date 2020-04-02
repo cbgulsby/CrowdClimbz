@@ -13,16 +13,24 @@ import {
 //import 'firebase/firestore';
 import firebase from '../firebase';
 
-
+function passwordCheck(pass) {
+    if (pass.length < 8) {
+        Alert.alert("Password too short");
+        return 1;
+    }
+    else return 0;
+    //to be expanded upon later
+}
 
 export default function ChangePassword({navigation}){   
     function send(val) {
         var dbh = firebase.firestore();
-
-        dbh.collection('gyms').doc('testgym').update({name: val});
-        navigation.navigate('Profile');
-        Alert.alert("Password Updated!");
-
+        if (!passwordCheck(val)){
+            dbh.collection('gyms').doc('testgym').update({name: val});
+            //navigation.navigate('Profile');
+            Alert.alert("Password Updated!");
+        }
+        
     }
 
     const [value, onChangeText] = React.useState('Change Password');
