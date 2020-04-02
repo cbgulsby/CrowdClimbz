@@ -7,6 +7,7 @@ import {
     TextInput 
 } from 'react-native';
 import firebase from '../firebase';
+import { YellowBox } from 'react-native';
 
 // firebase.initializeApp({
 // 	apiKey: "AIzaSyDfOuH54N5dKv5zqVZ3CylTZpn7y2eC9GI",
@@ -19,7 +20,7 @@ import firebase from '../firebase';
 //   	measurementId: "G-3RRKPJLYNG"
 // });
 
-
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 async function signup(email, pass, navigation) {
     var db = firebase.firestore();
