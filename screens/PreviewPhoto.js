@@ -23,13 +23,14 @@ export default function PreviewPhoto({navigation, route}){
     	<SafeAreaView style={styles.container}>
         	<View>
          	 <Image 
-         	 style={{height:500}}
+         	 style={{height: 500}}
          	 source={{ uri: data.uri }} 
+           resizeMode='contain'
          	 />
 			</View>
 			<Button
        			title="Use this Photo"
-        		onPress={() => navigation.navigate('Finish Problem', {data: data})}
+        		onPress={() => navigation.navigate('Mark Problem', {data: data})}
         	/>
         </SafeAreaView>
     );
