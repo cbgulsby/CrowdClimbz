@@ -6,7 +6,7 @@ import {
     Button,
     Image
 } from 'react-native';
-import { Permissions } from 'expo';
+// import { Permissions } from 'expo';
 import MapView, { Marker } from 'react-native-maps';
 import firebase from '../firebase';
 import 'firebase/firestore';
@@ -94,6 +94,7 @@ export default function SearchGym({navigation}) {
             setMarkers(tempMarkers);
         })
         console.log("markers =>", markers);
+        return tempMarkers;
     }
 
     return(
