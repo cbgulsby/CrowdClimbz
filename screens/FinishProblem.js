@@ -11,29 +11,45 @@ import {
   Alert
 } from 'react-native';
 import firebase from '../firebase';
-//import db from '../firebase';
+import * as ImagePicker from 'expo-image-picker';
+console.disableYellowBox = true;
+
+export function checkName(name){
+    	if(name == "") return 1;
+    	if(name.length > 20) return 2;
+    	else return 0;
+    }
+
+export function checkGym(name){
+    	if(name == "") return 1;
+    	else return 0;
+    }
 
 export default function FinishProblem( {navigation, route}){
 	const db = firebase.firestore();
 	const {data} = route.params;
 	const [problemDescription, setDescription] = useState('');
 	const [problemName, setProblemName] = useState('');
-	const [problemGrade, setGrade] = useState('v0');
+	const [problemGrade, setGrade] = useState('0');
 	const [problemGym, setGym] = useState('');
 	const [problemBetaVideo, setBetaVideo] = useState('');
 
     console.log(data);
 
-    function checkName(name){
-    	if(name == "") return 1;
-    	else return 0;
-    }
 
     function postProblem() {
     	var curDate = new Date().toISOString().substring(0,10);
     	var curTime = new Date().toISOString().substring(11,19);
     	if (checkName(problemName) == 1){
     		Alert.alert("You must name your problem to post it.");
+    		return;
+    	}
+    	if (checkName(problemName) == 2){
+    		Alert.alert("The name of your problem must be 20 characters or less.");
+    		return;
+    	}
+    	if(checkGym(problemGym) == 1){
+    		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
     db.collection("problems").add({
@@ -43,7 +59,7 @@ export default function FinishProblem( {navigation, route}){
 	    description: problemDescription,
 	    photo: data.uri,
 	    betaVideo: problemBetaVideo,
-	    user: 'lsilvashy',
+	    user: 'cbgulsby',
 	    date: curDate,
 	    time: curTime,
 	    outOfDateFlag: 0,
@@ -55,8 +71,20 @@ export default function FinishProblem( {navigation, route}){
 	.catch(function(error) {
 	    console.error("Error writing document: ", error);
 	});
-
+	navigation.navigate('Home');
 	}
+
+	async function pickVideo(){
+	    let result = await ImagePicker.launchImageLibraryAsync({
+	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+	    });
+
+	    console.log(result);
+
+	    if (!result.cancelled) {
+	      setBetaVideo(result.uri);
+	    }
+	  };
 
 	return(
 		<SafeAreaView style={styles.container}>
@@ -86,22 +114,22 @@ export default function FinishProblem( {navigation, route}){
     				setGrade(itemValue)
  					}
 	  			>
-	  			<Picker.Item label="V0" value="v0" />
-	  			<Picker.Item label="V1" value="v1" />
-	  			<Picker.Item label="V2" value="v2" />
-	  			<Picker.Item label="V3" value="v3" />
-	  			<Picker.Item label="V4" value="v4" />
-	  			<Picker.Item label="V5" value="v5" />
-	  			<Picker.Item label="V6" value="v6" />
-	  			<Picker.Item label="V7" value="v7" />
-	  			<Picker.Item label="V8" value="v8" />
-	  			<Picker.Item label="V9" value="v9" />
-	  			<Picker.Item label="V10" value="v10" />
-	  			<Picker.Item label="V11" value="v11" />
-	  			<Picker.Item label="V12" value="v12" />
-	  			<Picker.Item label="V13" value="v13" />
-	  			<Picker.Item label="V14" value="v14" />
-	  			<Picker.Item label="V15" value="v15" />
+	  			<Picker.Item label="V0" value="0" />
+	  			<Picker.Item label="V1" value="1" />
+	  			<Picker.Item label="V2" value="2" />
+	  			<Picker.Item label="V3" value="3" />
+	  			<Picker.Item label="V4" value="4" />
+	  			<Picker.Item label="V5" value="5" />
+	  			<Picker.Item label="V6" value="6" />
+	  			<Picker.Item label="V7" value="7" />
+	  			<Picker.Item label="V8" value="8" />
+	  			<Picker.Item label="V9" value="9" />
+	  			<Picker.Item label="V10" value="10" />
+	  			<Picker.Item label="V11" value="11" />
+	  			<Picker.Item label="V12" value="12" />
+	  			<Picker.Item label="V13" value="13" />
+	  			<Picker.Item label="V14" value="14" />
+	  			<Picker.Item label="V15" value="15" />
 	        	</Picker>
 	        	<TextInput
 	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2, marginBottom: 20}}
@@ -111,7 +139,7 @@ export default function FinishProblem( {navigation, route}){
 	        	<Button
 	        		title = "Add beta video"
 	        		style={{marginBottom: 20}}
-	        		onPress={() => Alert.alert("Add functionality to add video")}
+	        		onPress={() => pickVideo()}
 	        	/>
 	        	<Text></Text>
 	        	<Button
