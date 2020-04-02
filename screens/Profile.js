@@ -72,9 +72,9 @@ function ProfileScreen({navigation}){
                 </View>
                 <View style={{flex: 2}}>
                     <View style={styles.description}>
-                        <Text style={{color: 'white'}}>Username</Text>
-                        <Text style={{color: 'white'}}>Ability: V3 - V4</Text>
-                        <Text style={{color: 'white'}}>Preferred Gym: Robert E. Witt Recreation Center</Text>
+                        <Text style={{color: 'white'}}>cbgulsby</Text>
+                        <Text style={{color: 'white'}}>Ability: V3</Text>
+                        <Text style={{color: 'white'}}>Preferred Gym: Birmingham Boulders</Text>
                     </View>
                 </View>
             </View>

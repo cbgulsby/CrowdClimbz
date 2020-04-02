@@ -6,26 +6,61 @@ import {
   Text, 
   StyleSheet,
   Button, 
-  SafeAreaView 
+  SafeAreaView,
+  Image
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import CapturePhoto from '../screens/CapturePhoto';
 import FinishProblem from '../screens/FinishProblem';
 import PreviewPhoto from '../screens/PreviewPhoto';
 import Home from '../screens/Home';
+import MarkProblem from '../screens/MarkProblem';
 
 const Stack = createStackNavigator();
 
-function ProblemScreen({navigation}) {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Button
-          title="Take a Photo"
-          onPress={() => navigation.navigate('Take Photo')}
-        />
-      </View>
-    </SafeAreaView>
-  );
+class ProblemScreen extends React.Component {
+  state = {
+      image: null
+    };
+
+  
+  pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync();
+      console.log(result);
+
+      if (!result.cancelled) {
+        this.setState({ image: result });
+      }
+    };
+
+  render(){
+    let {image} = this.state;
+
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{paddingBottom:20}}>
+          <Button
+            title="Take a Photo"
+            onPress={() => this.props.navigation.navigate('Take Photo')}
+          />
+        </View>
+        <View>
+          <Button
+            title="Choose Photo from Phone"
+            onPress={this.pickImage}
+          />
+          {image &&
+            <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
+          {image &&
+            <Button 
+              title="Use this Photo"
+              onPress={() => this.props.navigation.navigate('Mark Problem', {data: image})} //FIXME!
+          />}
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
 function MyNavigator() {
@@ -35,6 +70,7 @@ function MyNavigator() {
         <Stack.Screen name="Finish Problem" component={FinishProblem} />
         <Stack.Screen name="Take Photo" component={CapturePhoto} />
         <Stack.Screen name="Preview Photo" component={PreviewPhoto} />
+        <Stack.Screen name="Mark Problem" component={MarkProblem} />
         <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
   );
