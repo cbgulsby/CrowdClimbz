@@ -1,56 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     StyleSheet, 
-    View, 
-    Text,
+    View,
     TextInput,
     Button,
-    Alert 
+    Image
 } from 'react-native';
+// import { Permissions } from 'expo';
+import MapView, { Marker } from 'react-native-maps';
+import firebase from '../firebase';
+import 'firebase/firestore';
 
-import firebase from 'firebase';
-import '@firebase/firestore';
+console.disableYellowBox = true;
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDfOuH54N5dKv5zqVZ3CylTZpn7y2eC9GI",
-    authDomain: "crowdclimbz.firebaseapp.com",
-    databaseURL: "https://crowdclimbz.firebaseio.com",
-    projectId: "crowdclimbz",
-    storageBucket: "crowdclimbz.appspot.com",
-    messagingSenderId: "760059550596",
-    appId: "1:760059550596:web:a88049a666755ee2ec1bd1",
-    measurementId: "G-3RRKPJLYNG"
-};
+// let markers = [
+//     {
+//         title: "place",
+//         latlng: {
+//             latitude: 33.212406,
+//             longitude: -87.531662
+//         },
+//         id: 0
+//     }
+// ]
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+export default function SearchGym({navigation}) {
 
-export default function SearchGym(){
+    //hook variables
 
-    function fullSend(val) {
-        firebase.firestore().collection('gyms').doc('testgym').set( {name: val});
+    const [text, setText] = useState('');
+    const [position, setPosition] = useState({
+        latitude: 34.71111,
+        longitude: -86.6540
+    });
+    const [markers, setMarkers] = useState([])
 
+    //user location functions
+
+    function geoSuccess(position) {
+        let crd = position.coords;
+
+        console.log('Your current position is:');
+        console.log(`Latitude : ${crd.latitude}`);
+        console.log(`Longitude: ${crd.longitude}`);
+        console.log(`More or less ${crd.accuracy} meters.`);
+        setPosition({
+            latitude: crd.latitude,
+            longitude: crd.longitude
+        })
     }
-    const [value, onChangeText] = React.useState('Search Gym Here');
     
-    //firebase.initializeApp(firebaseConfig);
+    function geoFail(position) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
 
-    //dbh.collection('gyms').doc('testgym').set( { name: 'this is a test' });
+    let geoOptions = {
+        enableHighAccuracy: true,
+        timeOut: 20000,
+        maximumAge: 60 * 60 * 24
+    };
+
+    function getCurrentLocation() {
+        navigator.geolocation.getCurrentPosition(geoSuccess, geoFail, geoOptions)
+    }
+
+    //gym locating function
+
+    function getData(value) {
+        setMarkers([]);
+        let tempMarkers = [];
+        console.log("value: ", value.nativeEvent.text);
+        firebase.firestore().collection('SearchGymsCollection')
+        .where("city", "==", value.nativeEvent.text)
+        .get()
+        .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc, i) {
+                console.log(doc.id, " => ", doc.data(), "\n");
+                const {
+                    gymName,
+                    location
+                } = doc.data();
+    
+                tempMarkers.push({
+                    title: gymName,
+                    latlng: {
+                        latitude: location.latitude,
+                        longitude: location.longitude
+                    },
+                    key: doc.id
+                })
+            });
+            console.log("tempMarkers =>", tempMarkers)
+            setMarkers(tempMarkers);
+        })
+        console.log("markers =>", markers);
+        return tempMarkers;
+    }
 
     return(
         <View style={styles.container}>
-            <TextInput
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                onChangeText={text => onChangeText(text)}
-                value={value}
-            />
-            <Button
-                title='Search'
-                color='#eb34d8'
-                onPress={() => fullSend(value)}
-            />
-
+            <View style={{flex: 1, flexDirection: 'row'}}>
+                <Button
+                    title=""
+                    onPress={() => {navigation.openDrawer()}}
+                >
+                    <Image/>
+                </Button>
+                <TextInput
+                    style={styles.inputContainer}
+                    // onChangeText={text => getData(text)}
+                    // onChange={(text) => {console.log(text)}}
+                    onSubmitEditing={text => getData(text)}
+                    // value={text}
+                    placeholder="Enter City Name"
+                />
+            </View>
+            <MapView
+                style={{flex: 15}}
+                region={{
+                    latitude: position.latitude,
+                    longitude: position.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.421
+                }}
+                showsUserLocation
+            >
+                {markers.map(marker => (
+                    <Marker
+                        coordinate={marker.latlng}
+                        title={marker.title}
+                        key={marker.key}
+                    />
+                ))}
+            </MapView>
         </View>
     );
 }
@@ -60,5 +142,12 @@ const styles = StyleSheet.create({
         paddingTop: 24,
         backgroundColor: '#4fb9ff',
         flex: 1
+    },
+    inputContainer: {
+        flex: 11, 
+        height: 40, 
+        borderColor: 'gray', 
+        borderWidth: 1, 
+        paddingLeft: 5 
     }
 });

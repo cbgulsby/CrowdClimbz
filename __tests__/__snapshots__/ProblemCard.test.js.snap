@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  accessible={true}
+  focusable={false}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#2576f7",
+      "borderColor": "black",
+      "borderWidth": 1,
+      "flexDirection": "row",
+      "height": 100,
+      "margin": 3,
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 3,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "justifyContent": "flex-end",
+          "paddingLeft": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 30,
+          }
+        }
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "justifyContent": "flex-start",
+          "paddingLeft": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 15,
+          }
+        }
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 40,
+        }
+      }
+    >
+      V
+    </Text>
+  </View>
+</View>
+`;
