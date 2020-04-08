@@ -1,0 +1,211 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  style={
+    Object {
+      "backgroundColor": "#4fb9ff",
+      "flex": 1,
+      "paddingTop": 16,
+    }
+  }
+>
+  <View>
+    <Text>
+      Change Climbing Ability
+    </Text>
+    <View
+      style={
+        Object {
+          "height": 40,
+          "width": 350,
+        }
+      }
+    >
+      <RCTPicker
+        items={
+          Array [
+            Object {
+              "label": "V0",
+              "textColor": undefined,
+              "value": "v0",
+            },
+            Object {
+              "label": "V1",
+              "textColor": undefined,
+              "value": "v1",
+            },
+            Object {
+              "label": "V2",
+              "textColor": undefined,
+              "value": "v2",
+            },
+            Object {
+              "label": "V3",
+              "textColor": undefined,
+              "value": "v3",
+            },
+            Object {
+              "label": "V4",
+              "textColor": undefined,
+              "value": "v4",
+            },
+            Object {
+              "label": "V5",
+              "textColor": undefined,
+              "value": "v5",
+            },
+            Object {
+              "label": "V6",
+              "textColor": undefined,
+              "value": "v6",
+            },
+            Object {
+              "label": "V7",
+              "textColor": undefined,
+              "value": "v7",
+            },
+            Object {
+              "label": "V8",
+              "textColor": undefined,
+              "value": "v8",
+            },
+            Object {
+              "label": "V9",
+              "textColor": undefined,
+              "value": "v9",
+            },
+            Object {
+              "label": "V10",
+              "textColor": undefined,
+              "value": "v10",
+            },
+            Object {
+              "label": "V11",
+              "textColor": undefined,
+              "value": "v11",
+            },
+            Object {
+              "label": "V12",
+              "textColor": undefined,
+              "value": "v12",
+            },
+            Object {
+              "label": "V13",
+              "textColor": undefined,
+              "value": "v13",
+            },
+            Object {
+              "label": "V14",
+              "textColor": undefined,
+              "value": "v14",
+            },
+            Object {
+              "label": "V15",
+              "textColor": undefined,
+              "value": "v15",
+            },
+          ]
+        }
+        onChange={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        selectedIndex={0}
+        style={
+          Array [
+            Object {
+              "height": 216,
+            },
+            undefined,
+          ]
+        }
+      />
+    </View>
+    <View
+      accessibilityRole="button"
+      accessibilityStates={Array []}
+      accessible={true}
+      focusable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {},
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#007AFF",
+                "fontSize": 18,
+                "padding": 8,
+                "textAlign": "center",
+              },
+            ]
+          }
+        >
+          Submit Changes
+        </Text>
+      </View>
+    </View>
+    <View
+      accessibilityRole="button"
+      accessibilityStates={Array []}
+      accessible={true}
+      focusable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {},
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#007AFF",
+                "fontSize": 18,
+                "padding": 8,
+                "textAlign": "center",
+              },
+            ]
+          }
+        >
+          Go Back
+        </Text>
+      </View>
+    </View>
+  </View>
+</RCTSafeAreaView>
+`;
