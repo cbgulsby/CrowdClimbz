@@ -1,0 +1,31 @@
+import React from 'react';
+
+import {
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+
+export default function ProblemCardScreen() {
+    return (
+        <View style = { styles.container }>
+            <Text>Hello</Text>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    textInput: {
+        height: 40,
+        width: '90%',
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginTop: 8
+    }
+})
