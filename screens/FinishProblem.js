@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import firebase from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
-console.disableYellowBox = true;
+console.disableYellowBox = true; 
 
 export function checkName(name){
     	if(name == "") return 1;
@@ -25,6 +25,14 @@ export function checkGym(name){
     	else return 0;
     }
 
+async function uploadImage(uri, problemName){
+	const response = await fetch(uri);
+	const blob = await response.blob();
+
+	var ref = firebase.storage().ref('problemPhotos').child(problemName);
+	ref.put(blob);
+}
+
 export default function FinishProblem( {navigation, route}){
 	const db = firebase.firestore();
 	const {data} = route.params;
@@ -33,8 +41,9 @@ export default function FinishProblem( {navigation, route}){
 	const [problemGrade, setGrade] = useState('0');
 	const [problemGym, setGym] = useState('');
 	const [problemBetaVideo, setBetaVideo] = useState('');
+	const currentUser = firebase.auth().currentUser;
 
-    console.log(data);
+    //console.log(data);
 
 
     function postProblem() {
@@ -52,14 +61,21 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
+    	uploadImage(data.uri, problemName)
+    		.then(() => {
+    			console.log('Image uploaded successfully');
+    		})
+    		.catch((error) => {
+    			console.log(error);
+    		});
     db.collection("problems").add({
 	    name: problemName,
 	    grade: problemGrade,
 	    gym: problemGym,
 	    description: problemDescription,
-	    photo: data.uri,
+	    photo: 'problemPhoto',
 	    betaVideo: problemBetaVideo,
-	    user: 'cbgulsby',
+	    user: currentUser.uid,
 	    date: curDate,
 	    time: curTime,
 	    outOfDateFlag: 0,
