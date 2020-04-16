@@ -41,10 +41,17 @@ export default function FinishProblem( {navigation, route}){
 	const [problemGrade, setGrade] = useState('0');
 	const [problemGym, setGym] = useState('');
 	const [problemBetaVideo, setBetaVideo] = useState('');
-	const currentUser = firebase.auth().currentUser;
-
-    //console.log(data);
-
+	const currentUserUID = firebase.auth().currentUser.uid;
+	const [currentUserUsername, setCurrentUser] = useState("");
+	db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+		if (!querySnapshot.empty){
+			var doc = querySnapshot.docs[0];
+			console.log("DOCUMENT DATA:", doc.data());
+			setCurrentUser(doc.data().username);
+		} else{
+			console.log("No such document");
+		}
+	});
 
     function postProblem() {
     	var curDate = new Date().toISOString().substring(0,10);
@@ -75,7 +82,7 @@ export default function FinishProblem( {navigation, route}){
 	    description: problemDescription,
 	    photo: 'problemPhoto',
 	    betaVideo: problemBetaVideo,
-	    user: currentUser.uid,
+	    user: currentUserUsername,
 	    date: curDate,
 	    time: curTime,
 	    outOfDateFlag: 0,
