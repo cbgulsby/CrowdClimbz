@@ -14,6 +14,7 @@ import ProblemCard from '../components/ProblemCard';
 import ChangeClimbAbility from '../screens/ChangeClimbAbility';
 import ChangePreferredGym from '../screens/ChangePreferredGym';
 import ChangePassword from '../screens/ChangePassword';
+import firebase from '../firebase';
 
 const Stack = createStackNavigator();
 
@@ -59,7 +60,31 @@ const sampleData = [
 
 function ProfileScreen({navigation}){
 
+    const [currentUserUsername, setCurrentUser] = useState("");
+    const [currentClimbingAbility, setClimbingAbility] = useState("");
+    const [currentPreferredGym, setPreferredGym] = useState("");
+
     const [view, setView] = useState(0);
+
+    const currentUserUID = firebase.auth().currentUser.uid;
+    
+    const dbh = firebase.firestore();
+
+    dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+        if (!querySnapshot.empty){
+            var doc = querySnapshot.docs[0];
+            console.log("DOCUMENT DATA:", doc.data());
+            setCurrentUser(doc.data().username)
+            setClimbingAbility(doc.data().climbingAbility);
+            setPreferredGym(doc.data().preferredGym);
+        }
+        else {
+            console.log("No such document");
+        }
+    });
+
+    //var user = dbh.collection('users').doc(currentUser.uid).data();
+    //var ability = dbh.collection('users').doc(currentUser.uid).get();
 
     return(
         <SafeAreaView style={styles.container}>
@@ -72,9 +97,10 @@ function ProfileScreen({navigation}){
                 </View>
                 <View style={{flex: 2}}>
                     <View style={styles.description}>
-                        <Text style={{color: 'white'}}>cbgulsby</Text>
-                        <Text style={{color: 'white'}}>Ability: V3</Text>
-                        <Text style={{color: 'white'}}>Preferred Gym: Birmingham Boulders</Text>
+
+                        <Text style={{color: 'white'}}> {currentUserUsername} </Text>
+                        <Text style={{color: 'white'}}>Ability: V{currentClimbingAbility}</Text>
+                        <Text style={{color: 'white'}}>Preferred Gym: {currentPreferredGym}</Text>
                     </View>
                 </View>
             </View>
