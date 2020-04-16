@@ -25,11 +25,18 @@ export function checkGym(name){
     	else return 0;
     }
 
-async function uploadImage(uri, problemName){
+async function uploadImage(uri, username, problemName){
 	const response = await fetch(uri);
 	const blob = await response.blob();
 
-	var ref = firebase.storage().ref('problemPhotos').child(problemName);
+	var ref = firebase.storage().ref('problemPhotos').child(username).child(problemName);
+	ref.put(blob);
+}
+
+async function uploadVideo(uri, username, problemName){
+	const response = await fetch(uri);
+	const blob = await response.blob();
+	var ref = firebase.storage().ref('problemVideos').child(username).child(problemName);
 	ref.put(blob);
 }
 
@@ -40,9 +47,11 @@ export default function FinishProblem( {navigation, route}){
 	const [problemName, setProblemName] = useState('');
 	const [problemGrade, setGrade] = useState('0');
 	const [problemGym, setGym] = useState('');
-	const [problemBetaVideo, setBetaVideo] = useState('');
+	const [problemVideoFlag, setVideoFlag] = useState(0);
 	const currentUserUID = firebase.auth().currentUser.uid;
 	const [currentUserUsername, setCurrentUser] = useState("");
+	const [problemVideo, setProblemVideo] = useState([]);
+	
 	db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
 		if (!querySnapshot.empty){
 			var doc = querySnapshot.docs[0];
@@ -52,6 +61,19 @@ export default function FinishProblem( {navigation, route}){
 			console.log("No such document");
 		}
 	});
+
+	async function pickVideo(){
+	    let result = await ImagePicker.launchImageLibraryAsync({
+	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+	    });
+	    console.log("HERE");
+	    console.log(result);
+
+	    if (!result.cancelled) {
+	    	setProblemVideo(result);
+	      	setVideoFlag(1);
+	    }
+	};
 
     function postProblem() {
     	var curDate = new Date().toISOString().substring(0,10);
@@ -68,20 +90,28 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
-    	uploadImage(data.uri, problemName)
+    	uploadImage(data.uri, currentUserUsername, problemName)
     		.then(() => {
     			console.log('Image uploaded successfully');
     		})
     		.catch((error) => {
     			console.log(error);
     		});
+    	if(problemVideoFlag == 1){
+	    	uploadVideo(problemVideo.uri, currentUserUsername, problemName)
+	    		.then(() => {
+	    			console.log('Video uploaded successfully');
+	    		})
+	    		.catch((error) => {
+	    			console.log(error);
+	    		});
+    	}
     db.collection("problems").add({
 	    name: problemName,
 	    grade: problemGrade,
 	    gym: problemGym,
 	    description: problemDescription,
-	    photo: 'problemPhoto',
-	    betaVideo: problemBetaVideo,
+	    betaVideo: problemVideoFlag,
 	    user: currentUserUsername,
 	    date: curDate,
 	    time: curTime,
@@ -96,18 +126,6 @@ export default function FinishProblem( {navigation, route}){
 	});
 	navigation.navigate('Home');
 	}
-
-	async function pickVideo(){
-	    let result = await ImagePicker.launchImageLibraryAsync({
-	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-	    });
-
-	    console.log(result);
-
-	    if (!result.cancelled) {
-	      setBetaVideo(result.uri);
-	    }
-	  };
 
 	return(
 		<SafeAreaView style={styles.container}>
@@ -164,6 +182,9 @@ export default function FinishProblem( {navigation, route}){
 	        		style={{marginBottom: 20}}
 	        		onPress={() => pickVideo()}
 	        	/>
+	        	{problemVideoFlag == 1 &&
+	        		<Text>Video added!</Text>
+	        	}
 	        	<Text></Text>
 	        	<Button
 	        		title = "Post Problem!"
