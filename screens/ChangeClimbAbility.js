@@ -28,13 +28,13 @@ export default function ChangeClimbAbility({navigation}){
 
 
 
-    const [selectedValue, setSelectedValue] = useState("Please Select");
+    const [selectedValue, setSelectedValue] = useState("0");
     
 
     return(
         <SafeAreaView style={styles.container}>
             <View>
-                <Text>Change Climbing Ability</Text>
+                
                 <Picker style={{borderColor: 'gray', borderWidth: 2}}
 	        		prompt='Choose Grade'
 	        		mode='dropdown'
@@ -60,8 +60,21 @@ export default function ChangeClimbAbility({navigation}){
 	  			<Picker.Item label="V15" value="15" />
 	        	</Picker>
 
-	        	<Button  title="Submit Changes" onPress={() => send(selectedValue)} />
-                <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
+            </View>
+                
+            <View style={{flexDirection: 'row', flex: 0.1}}>
+                <TouchableOpacity 
+                    style={styles.button} 
+                    onPress={() => navigation.navigate('Profile')}>
+                    <Text> Cancel </Text>
+                </TouchableOpacity>
+
+	        	<TouchableOpacity 
+                    style={styles.button} 
+                    onPress={() => send(selectedValue)}>
+                    <Text> Submit </Text>
+                </TouchableOpacity>      
+                    
             </View>
 
         </SafeAreaView>
@@ -69,9 +82,26 @@ export default function ChangeClimbAbility({navigation}){
 }
 
 const styles = StyleSheet.create({
+    
     container: {
         paddingTop: 16,
-        backgroundColor: '#4fb9ff',
+        backgroundColor: '#118AB2',
         flex: 1
+    },
+    button: {
+        backgroundColor: '#FFD166',
+        borderColor: '#073B4C',
+        borderWidth: 1,
+        //borderRadius: 12,
+        color: 'white',
+        fontSize: 24,
+        fontWeight: 'bold',
+        overflow: 'hidden',
+        padding: 12,
+        textAlign:'center',
+        width: 200,
+        justifyContent: 'center', 
+        alignItems: 'center',
+
     }
 });

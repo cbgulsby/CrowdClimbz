@@ -26,9 +26,9 @@ export default function ChangePassword({navigation}){
     function send(val) {
         var dbh = firebase.firestore();
         if (!passwordCheck(val)){
-            dbh.collection('gyms').doc('testgym').update({name: val});
+            //dbh.collection('gyms').doc('testgym').update({name: val});
             //navigation.navigate('Profile');
-            Alert.alert("Password Updated!");
+            Alert.alert("Password Updated! (placeholder)");
         }
         
     }
@@ -38,13 +38,26 @@ export default function ChangePassword({navigation}){
         <SafeAreaView style={styles.container}>
             <View>    
                 <TextInput
-                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                    style={styles.inputContainer}
                     onChangeText={text => onChangeText(text)}
-                    value={value}
+                    //value={value}
+                    placeholder="Enter New Password"
                 />
-                <Button  title="Submit Changes" onPress={() => send(value)} />
+                
+                <View style={{flexDirection: 'row', flex: 1}}>
+                    <TouchableOpacity 
+                        style={styles.button} 
+                        onPress={() => navigation.navigate('Profile')}>
+                        <Text> Cancel </Text>
+                    </TouchableOpacity>
 
-                <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
+                    <TouchableOpacity 
+                        style={styles.button} 
+                        onPress={() => send(value)}>
+                        <Text> Submit </Text>
+                    </TouchableOpacity>      
+                    
+                </View>
             </View>
 
         </SafeAreaView>
@@ -54,7 +67,33 @@ export default function ChangePassword({navigation}){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
-        backgroundColor: '#4fb9ff',
+        backgroundColor: '#118AB2',
         flex: 1
+    },
+    button: {
+        backgroundColor: '#FFD166', 
+        borderRadius: 4
+    },
+    inputContainer: {
+        //flex: 11, 
+        height: 40, 
+        borderColor: '#073B4C', 
+        borderWidth: 1, 
+        paddingLeft: 5 
+    },
+    button: {
+        backgroundColor: '#FFD166',
+        borderColor: '#073B4C',
+        borderWidth: 1,
+        //borderRadius: 12,
+        color: '#073B4C',
+        fontSize: 24,
+        fontWeight: 'bold',
+        overflow: 'hidden',
+        padding: 12,
+        textAlign:'center',
+        width: 200,
+        justifyContent: 'center', 
+        alignItems: 'center',
     }
 });

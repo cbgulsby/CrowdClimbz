@@ -88,47 +88,35 @@ function ProfileScreen({navigation}){
 
     return(
         <SafeAreaView style={styles.container}>
+            
             <View style={styles.profileBar}>
-                <View style={{flex: 1, alignContent: 'center'}}>
-                    <Image 
-                        source={require('../assets/blank_profile_pic.png')}
-                        style={styles.profilePic}
-                    />
-                </View>
-                <View style={{flex: 2}}>
                     <View style={styles.description}>
-
-                        <Text style={{color: 'white'}}> {currentUserUsername} </Text>
-                        <Text style={{color: 'white'}}>Ability: V{currentClimbingAbility}</Text>
-                        <Text style={{color: 'white'}}>Preferred Gym: {currentPreferredGym}</Text>
+                        <Text style={{color: 'white', textAlign: 'center', fontSize: 26}}> {currentUserUsername} </Text>
+                        <Text style={{color: 'white', textAlign: 'center'}}>Ability: V{currentClimbingAbility}</Text>
+                        <Text style={{color: 'white', textAlign: 'center'}}>Preferred Gym: {currentPreferredGym}</Text>
                     </View>
-                </View>
             </View>
 
-            <View style={{backgroundColor: 'white', flex: 6}}>
+
+
+            <View style={{backgroundColor: '#118AB2', flex: 6}}>
 
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <TouchableOpacity 
-                        onPress={() => {setView(1)}}
-                        style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'white', fontSize: 25}}>My Problems</Text>
+                        onPress={() => {setView(0)}}
+                        style={styles.button}>
+                            <Text style={{color: '#073B4C', fontSize: 25}}>My Problems</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        onPress={() => {setView(0)}}
-                        style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'white', fontSize: 25}}>Edit Profile</Text>
+                        onPress={() => {setView(1)}}
+                        style={styles.button}>
+                            <Text style={{color: '#073B4C', fontSize: 25}}>Edit Profile</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={{flex: 9}}>
                     {view ? (
-                        <FlatList 
-                            data={sampleData}
-                            renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
-                            keyExtractor={item => item.id} 
-                        />
-                    ) : (
-                        <View style={{flex: 1, backgroundColor: 'white', margin: 3}}>
+                        <View style={{flex: 1, backgroundColor: '#118AB2', margin: 3}}>
                             <TouchableOpacity style={styles.profileEditContainer}
                                 onPress={() => navigation.navigate('Change Climbing Ability')}>
                                 
@@ -143,13 +131,16 @@ function ProfileScreen({navigation}){
                                 onPress={() => navigation.navigate('Change Password')}>
                                 <Text style={styles.profileEditText}>Change Password</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.profileEditContainer}>
-                                <Text style={styles.profileEditText}>Notification Preferences</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.profileEditContainer}>
-                                <Text style={styles.profileEditText}>Apply to be Moderator</Text>
-                            </TouchableOpacity>
+                            
                         </View>
+                    ) : (
+                        
+                        <FlatList 
+                            data={sampleData}
+                            renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
+                            keyExtractor={item => item.id} 
+                        />
+
                     )}
                 </View>
 
@@ -182,7 +173,7 @@ export default function Profile(){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
-        backgroundColor: 'white',
+        backgroundColor: '#118AB2',
         flex: 1
     },
     profilePic: {
@@ -197,35 +188,44 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     description: {
-        backgroundColor: '#2576f7', 
+        backgroundColor: '#073B4C', 
         flex: 1, 
-        margin: 10,
-        padding: 2,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        borderBottomRightRadius: 5,
-        borderBottomLeftRadius: 5,
-        alignContent: 'flex-start',
-        justifyContent: 'flex-start',
+        margin: 5,
+        //padding: 2,
+        borderRadius: 10,
+        alignContent: 'center',
+        justifyContent: 'center',
         borderColor: 'black',
         borderWidth: 1,
     },
     profileBar: {
-        backgroundColor: 'white', 
+        backgroundColor: '#118AB2', 
         flex: 1, 
         flexDirection: 'row'
     },
     profileEditContainer: {
         flex: 1, 
-        backgroundColor: '#2576f7', 
+        backgroundColor: '#FFD166', 
         justifyContent: 'center', 
         alignItems: 'center', 
         borderColor: 'black', 
         borderWidth: 1, 
-        margin: 3
+        margin: 3,
+        borderRadius: 10
     },
     profileEditText: {
         fontSize: 30, 
-        color: 'white'
+        color: '#073B4C'
+    },
+    button: {
+        flex: 1, 
+        backgroundColor: '#EF476F', 
+        borderColor: 'black', 
+        borderWidth: 1, 
+        margin: 3, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        borderRadius: 10
     }
+
 });

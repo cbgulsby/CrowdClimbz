@@ -67,7 +67,12 @@ export default function ChangePreferredGym({navigation}){
         <SafeAreaView style={styles.container}>
             <View>
                 
-                <Button title="Load Gyms" onPress={() => getData()} />
+                <TouchableOpacity 
+                    style={styles.singleButton} 
+                    onPress={() => getData()}>
+                    <Text> Load Gyms </Text>
+                </TouchableOpacity> 
+
                 <Picker style={{borderColor: 'gray', borderWidth: 2}}
                 prompt='Choose Grade'
                 mode='dropdown'
@@ -78,8 +83,19 @@ export default function ChangePreferredGym({navigation}){
                 
                 </Picker>
 
-                <Button  title="Submit Changes" onPress={() => send(selectedValue)} />
-                <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
+                <View style={{flexDirection: 'row', flex: 0.2}}>
+                    <TouchableOpacity 
+                        style={styles.doubleButton} 
+                        onPress={() => navigation.navigate('Profile')}>
+                        <Text> Cancel </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        style={styles.doubleButton} 
+                        onPress={() => send(selectedValue)}>
+                        <Text> Submit </Text>
+                    </TouchableOpacity>        
+                </View>
                 
                
             </View>
@@ -91,7 +107,37 @@ export default function ChangePreferredGym({navigation}){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
-        backgroundColor: '#4fb9ff',
+        backgroundColor: '#118AB2',
         flex: 1
+    },
+    doubleButton: {
+        backgroundColor: '#FFD166',
+        borderColor: '#073B4C',
+        borderWidth: 1,
+        //borderRadius: 12,
+        color: '#073B4C',
+        fontSize: 24,
+        fontWeight: 'bold',
+        overflow: 'hidden',
+        padding: 12,
+        textAlign:'center',
+        width: 200,
+        justifyContent: 'center', 
+        alignItems: 'center',
+    },
+    singleButton: {
+        backgroundColor: '#FFD166',
+        borderColor: '#073B4C',
+        borderWidth: 1,
+        //borderRadius: 12,
+        color: '#073B4C',
+        fontSize: 24,
+        fontWeight: 'bold',
+        overflow: 'hidden',
+        padding: 12,
+        textAlign:'center',
+        justifyContent: 'center', 
+        alignItems: 'center',
     }
+
 });
