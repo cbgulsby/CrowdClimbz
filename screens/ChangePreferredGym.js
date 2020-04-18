@@ -37,6 +37,7 @@ export default function ChangePreferredGym({navigation}){
         .get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc, i) {
+                //let tempMarkers = [];
                 console.log(doc.id, " => ", doc.data(), "\n");
                 const {
                     gymName,
@@ -50,35 +51,23 @@ export default function ChangePreferredGym({navigation}){
             });
             console.log("tempMarkers =>", tempMarkers)
             setMarkers(tempMarkers);
+        
         })
         console.log("markers =>", markers);
         return tempMarkers;
     }
     
-
-    //test data
-
-    var countryData = ["India","Pakistan","USA"];
-    var hyungLine = [
-        {title: "Kim Namjoon", key: 1},
-        {title: "Kim Seokjin", key: 2},
-        {title: "Min Yoongi", key: 3},
-        {title: "Jung Hoseok", key: 4}
-    ];
         
     function pickerList(pickerData) {
         return( pickerData.map( (x) => { 
               return( <Picker.Item label={x.title} key={x.key} value={x.title}  />)} ));
     };
 
-
-
-
     return(
         <SafeAreaView style={styles.container}>
             <View>
-                <Text>Change Preferred Gym</Text>
-
+                
+                <Button title="Load Gyms" onPress={() => getData()} />
                 <Picker style={{borderColor: 'gray', borderWidth: 2}}
                 prompt='Choose Grade'
                 mode='dropdown'
@@ -87,12 +76,11 @@ export default function ChangePreferredGym({navigation}){
                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
                 {pickerList(markers)}
                 
-
                 </Picker>
 
                 <Button  title="Submit Changes" onPress={() => send(selectedValue)} />
                 <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
-                <Button title="Set Up" onPress={() => getData()} />
+                
                
             </View>
 
