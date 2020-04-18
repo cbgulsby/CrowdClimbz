@@ -4,27 +4,34 @@ import {
     Text, 
     View, 
     Button, 
-    TextInput 
+    TextInput,
+    Alert 
 } from 'react-native';
 import firebase from '../firebase';
-import { YellowBox } from 'react-native';
 
-// firebase.initializeApp({
-// 	apiKey: "AIzaSyDfOuH54N5dKv5zqVZ3CylTZpn7y2eC9GI",
-//   	authDomain: "crowdclimbz.firebaseapp.com",
-//   	databaseURL: "https://crowdclimbz.firebaseio.com",
-//   	projectId: "crowdclimbz",
-//   	storageBucket: "crowdclimbz.appspot.com",
-//   	messagingSenderId: "760059550596",
-//   	appId: "1:760059550596:web:a88049a666755ee2ec1bd1",
-//   	measurementId: "G-3RRKPJLYNG"
-// });
+console.disableYellowBox = true;
 
-YellowBox.ignoreWarnings(['Setting a timer']);
+async function signup(email, username, pass, navigation) {
+    if (checkEmail(email) == -1) {
+        Alert.alert("Must enter valid email");
+        return;
+    }
+    if (checkUsername(username) == -1) {
+        Alert.alert("Must enter valid username");
+        return;
+    }
+    if (checkPass(pass) == -2) {
+        Alert.alert("Must enter valid password");
+        return;
+    }
+    if (checkPass(pass) == -1) {
+        Alert.alert("Password length must be 6 or more characters");
+        return;
+    }
 
-async function signup(email, pass, navigation) {
     var db = firebase.firestore();
     var auth = firebase.auth();
+    
     try {
         await auth.createUserWithEmailAndPassword(email, pass)
             .then(() => {
@@ -36,7 +43,10 @@ async function signup(email, pass, navigation) {
                             .doc(newUser.uid)
                             .set({
                                 id: newUser.uid,
-                                email: email
+                                email: email,
+                                username: username,
+                                preferredGym: "",
+                                climbingAbility: ""
                             })
                         }
                     })
@@ -53,15 +63,39 @@ async function signup(email, pass, navigation) {
     }
 }
 
+function checkEmail(email) {
+    if (email.length == 0) {
+        return -1;
+    }
+    return 0;
+}
+
+function checkUsername(username) {
+    if (username.length == 0) {
+        return -1;
+    }
+    return 0;
+}
+
+function checkPass(pass) {
+    if (pass.length == 0) {
+        return -2;
+    }
+    else if (pass.length < 6) {
+        return -1;
+    }
+    return 0;
+}
+
 export default function SignUp({navigation}){
 
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [pass, setPass] = useState('');
 
     return(
         <View style = { styles.container }>
             <Text>Sign Up</Text>
-            { /* Handle possible errors with sign up */ }
             <TextInput
                 style = { styles.textInput }
                 autoCapitalize = 'none'
@@ -70,6 +104,15 @@ export default function SignUp({navigation}){
                     (email) => setEmail(email)
                 }
                 value = { email }
+            />
+            <TextInput
+                style = { styles.textInput }
+                autoCapitalize = 'none'
+                placeholder = 'Username'
+                onChangeText = {
+                    (username) => setUsername(username)
+                }
+                value = { username }
             />
             <TextInput
                 style = { styles.textInput }
@@ -84,12 +127,11 @@ export default function SignUp({navigation}){
             <Button
                 title = 'Sign Up'
                 onPress = { 
-                    () => { signup(email, pass, navigation) }
+                    () => { signup(email, username, pass, navigation) }
                 }
             />
             <Button
                 title = 'Already have an account?'
-                // Handle navigation to login screen
                 onPress = { 
                     () => navigation.navigate('Login') 
                 }
@@ -97,7 +139,6 @@ export default function SignUp({navigation}){
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {

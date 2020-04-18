@@ -11,7 +11,8 @@ const firebaseConfig = {
   	storageBucket: "crowdclimbz.appspot.com",
   	messagingSenderId: "760059550596",
   	appId: "1:760059550596:web:a88049a666755ee2ec1bd1",
-  	measurementId: "G-3RRKPJLYNG"
+  	measurementId: "G-3RRKPJLYNG",
+  	storageBucket: "crowdclimbz.appspot.com"
 };
 
 firebase.initializeApp(firebaseConfig);

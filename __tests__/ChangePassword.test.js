@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import {ChangePassword} from '../screens/ChangePassword';
+import ChangePassword from '../screens/ChangePassword';
 
 
 test('renders correctly', () => {
