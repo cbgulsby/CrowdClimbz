@@ -16,15 +16,64 @@ export default function ChangePreferredGym({navigation}){
     
     function send(val) {
         var dbh = firebase.firestore();
+        const currentUserUID = firebase.auth().currentUser.uid;
 
-        dbh.collection('gyms').doc('testgym').update({pref: val});
-        navigation.navigate('Profile');
+        dbh.collection('users').doc(currentUserUID).update({preferredGym: val});
+        //navigation.navigate('Profile');
         Alert.alert("Preferred Gym Updated!");
 
     }
 
-    const [selectedValue, setSelectedValue] = useState("Gym2");
+    const [selectedValue, setSelectedValue] = useState("");
+
+    //I want to build an array of all the gym names we currently have
+    const [markers, setMarkers] = useState([]);
+        
+    function getData() {
+        setMarkers([]);
+        let tempMarkers = [];
+        //console.log("value: ", value.nativeEvent.text);
+        firebase.firestore().collection('SearchGymsCollection')
+        .get()
+        .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc, i) {
+                console.log(doc.id, " => ", doc.data(), "\n");
+                const {
+                    gymName,
+                    location
+                } = doc.data();
     
+                tempMarkers.push({
+                    title: gymName,
+                    key: doc.id
+                })
+            });
+            console.log("tempMarkers =>", tempMarkers)
+            setMarkers(tempMarkers);
+        })
+        console.log("markers =>", markers);
+        return tempMarkers;
+    }
+    
+
+    //test data
+
+    var countryData = ["India","Pakistan","USA"];
+    var hyungLine = [
+        {title: "Kim Namjoon", key: 1},
+        {title: "Kim Seokjin", key: 2},
+        {title: "Min Yoongi", key: 3},
+        {title: "Jung Hoseok", key: 4}
+    ];
+        
+    function pickerList(pickerData) {
+        return( pickerData.map( (x) => { 
+              return( <Picker.Item label={x.title} key={x.key} value={x.title}  />)} ));
+    };
+
+
+
+
     return(
         <SafeAreaView style={styles.container}>
             <View>
@@ -35,17 +84,16 @@ export default function ChangePreferredGym({navigation}){
                 mode='dropdown'
                 style={{height: 40, width: 350}}
                 selectedValue = {selectedValue}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                <Picker.Item label="Gym1" value="Gym 1" />
-                <Picker.Item label="Gym2" value="Gym 2" />
-                <Picker.Item label="Gym3" value="Gym 3" />
-                <Picker.Item label="Gym4" value="Gym 4" />
+                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+                {pickerList(markers)}
                 
+
                 </Picker>
 
                 <Button  title="Submit Changes" onPress={() => send(selectedValue)} />
                 <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
+                <Button title="Set Up" onPress={() => getData()} />
+               
             </View>
 
         </SafeAreaView>
