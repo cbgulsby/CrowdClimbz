@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import firebase from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
-console.disableYellowBox = true;
+console.disableYellowBox = true; 
 
 export function checkName(name){
     	if(name == "") return 1;
@@ -25,6 +25,21 @@ export function checkGym(name){
     	else return 0;
     }
 
+async function uploadImage(uri, username, problemName){
+	const response = await fetch(uri);
+	const blob = await response.blob();
+
+	var ref = firebase.storage().ref('problemPhotos').child(username).child(problemName);
+	ref.put(blob);
+}
+
+async function uploadVideo(uri, username, problemName){
+	const response = await fetch(uri);
+	const blob = await response.blob();
+	var ref = firebase.storage().ref('problemVideos').child(username).child(problemName);
+	ref.put(blob);
+}
+
 export default function FinishProblem( {navigation, route}){
 	const db = firebase.firestore();
 	const {data} = route.params;
@@ -32,10 +47,33 @@ export default function FinishProblem( {navigation, route}){
 	const [problemName, setProblemName] = useState('');
 	const [problemGrade, setGrade] = useState('0');
 	const [problemGym, setGym] = useState('');
-	const [problemBetaVideo, setBetaVideo] = useState('');
+	const [problemVideoFlag, setVideoFlag] = useState(0);
+	const currentUserUID = firebase.auth().currentUser.uid;
+	const [currentUserUsername, setCurrentUser] = useState("");
+	const [problemVideo, setProblemVideo] = useState([]);
+	
+	db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+		if (!querySnapshot.empty){
+			var doc = querySnapshot.docs[0];
+			console.log("DOCUMENT DATA:", doc.data());
+			setCurrentUser(doc.data().username);
+		} else{
+			console.log("No such document");
+		}
+	});
 
-    console.log(data);
+	async function pickVideo(){
+	    let result = await ImagePicker.launchImageLibraryAsync({
+	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+	    });
+	    console.log("HERE");
+	    console.log(result);
 
+	    if (!result.cancelled) {
+	    	setProblemVideo(result);
+	      	setVideoFlag(1);
+	    }
+	};
 
     function postProblem() {
     	var curDate = new Date().toISOString().substring(0,10);
@@ -52,14 +90,29 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
+    	uploadImage(data.uri, currentUserUsername, problemName)
+    		.then(() => {
+    			console.log('Image uploaded successfully');
+    		})
+    		.catch((error) => {
+    			console.log(error);
+    		});
+    	if(problemVideoFlag == 1){
+	    	uploadVideo(problemVideo.uri, currentUserUsername, problemName)
+	    		.then(() => {
+	    			console.log('Video uploaded successfully');
+	    		})
+	    		.catch((error) => {
+	    			console.log(error);
+	    		});
+    	}
     db.collection("problems").add({
 	    name: problemName,
 	    grade: problemGrade,
 	    gym: problemGym,
 	    description: problemDescription,
-	    photo: data.uri,
-	    betaVideo: problemBetaVideo,
-	    user: 'cbgulsby',
+	    betaVideo: problemVideoFlag,
+	    user: currentUserUsername,
 	    date: curDate,
 	    time: curTime,
 	    outOfDateFlag: 0,
@@ -73,18 +126,6 @@ export default function FinishProblem( {navigation, route}){
 	});
 	navigation.navigate('Home');
 	}
-
-	async function pickVideo(){
-	    let result = await ImagePicker.launchImageLibraryAsync({
-	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-	    });
-
-	    console.log(result);
-
-	    if (!result.cancelled) {
-	      setBetaVideo(result.uri);
-	    }
-	  };
 
 	return(
 		<SafeAreaView style={styles.container}>
@@ -141,6 +182,9 @@ export default function FinishProblem( {navigation, route}){
 	        		style={{marginBottom: 20}}
 	        		onPress={() => pickVideo()}
 	        	/>
+	        	{problemVideoFlag == 1 &&
+	        		<Text>Video added!</Text>
+	        	}
 	        	<Text></Text>
 	        	<Button
 	        		title = "Post Problem!"
