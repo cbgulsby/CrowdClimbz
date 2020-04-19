@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { 
   View, 
-  Text, 
-  SafeAreaView, 
-  StyleSheet, 
-  FlatList
+  Text,
+  StyleSheet,
+  ActivityIndicator
 } from 'react-native';
 import ProblemList from '../components/ProblemList';
 import firebase from '../firebase';
@@ -12,9 +11,12 @@ console.disableYellowBox = true;
 
 export default function Home({navigation}) {
   const [problems, setProblems] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
   const ref = firebase.firestore().collection('problems');
 
   useEffect(() => {
+    setLoading(true)
     return ref.onSnapshot(querySnapshot => {
       const tempProblems = [];
       querySnapshot.forEach(doc => {
@@ -32,13 +34,6 @@ export default function Home({navigation}) {
           user
         } = doc.data();
 
-        // tempProblems.push({
-        //   gym: gym,
-        //   user: user,
-        //   grade: grade,
-        //   name: name,
-        //   id: doc.id
-        // });
         tempProblems.push({
           problemInfo: {
               gymName: gym,
@@ -50,6 +45,7 @@ export default function Home({navigation}) {
       })
       });
       setProblems(tempProblems);
+      setLoading(false);
     });
   }, []);
 
@@ -57,13 +53,14 @@ export default function Home({navigation}) {
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 30, color: '#073B4C', fontWeight: 'bold'}}>Welcome to CrowdClimbz!</Text>
-      {/* <FlatList
-         style={{width: 350}}
-         data={problems}
-         renderItem={({item}) => <ProblemCard id={item.id} problemName={item.name} gymLocation={item.gym} problemLevel={item.grade} />} 
-         keyExtractor={item => item.id} 
-      /> */}
-      <ProblemList problems={problems} />
+      {isLoading ?
+        <ActivityIndicator 
+          size='large'
+          color='#EF476F'
+          style={styles.indicator}
+        /> :
+        <ProblemList problems={problems} />
+      }
     </View>
   );
 }

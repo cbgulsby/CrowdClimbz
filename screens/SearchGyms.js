@@ -4,7 +4,7 @@ import {
     View,
     TextInput,
     Button,
-    Image
+    Text
 } from 'react-native';
 // import { Permissions } from 'expo';
 import MapView, { Marker } from 'react-native-maps';
@@ -12,17 +12,6 @@ import firebase from '../firebase';
 import 'firebase/firestore';
 
 console.disableYellowBox = true;
-
-// let markers = [
-//     {
-//         title: "place",
-//         latlng: {
-//             latitude: 33.212406,
-//             longitude: -87.531662
-//         },
-//         id: 0
-//     }
-// ]
 
 export default function SearchGym({navigation}) {
 
@@ -99,13 +88,15 @@ export default function SearchGym({navigation}) {
 
     return(
         <View style={styles.container}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-                <Button
+            <View style={{flex: 2, flexDirection: 'row'}}>
+                {/* <Button
                     title=""
                     onPress={() => {navigation.openDrawer()}}
+                    color='#EF476F'
+                    style={{justifyContents: 'center'}}
                 >
-                    <Image/>
-                </Button>
+                    <Text>Menu</Text>
+                </Button> */}
                 <TextInput
                     style={styles.inputContainer}
                     // onChangeText={text => getData(text)}
@@ -116,7 +107,7 @@ export default function SearchGym({navigation}) {
                 />
             </View>
             <MapView
-                style={{flex: 15}}
+                style={{flex: 24}}
                 region={{
                     latitude: position.latitude,
                     longitude: position.longitude,
@@ -133,6 +124,16 @@ export default function SearchGym({navigation}) {
                     />
                 ))}
             </MapView>
+            {/* <TextInput style={{flex: 1}} />
+            <MapView 
+                initialRegion={{
+                    latitude: 37.78825,
+                    longitude: -122.4324,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                }}
+                style={{flex: 1}}
+            /> */}
         </View>
     );
 }
@@ -140,14 +141,17 @@ export default function SearchGym({navigation}) {
 const styles = StyleSheet.create({
     container: {
         paddingTop: 24,
-        backgroundColor: '#4fb9ff',
+        backgroundColor: '#118AB2',
         flex: 1
     },
     inputContainer: {
-        flex: 11, 
-        height: 40, 
+        height: 40,
+        width: '97.5%',
+        backgroundColor: 'white', 
         borderColor: 'gray', 
         borderWidth: 1, 
-        paddingLeft: 5 
+        paddingLeft: 5,
+        margin: 5,
+        alignSelf: 'center',
     }
 });

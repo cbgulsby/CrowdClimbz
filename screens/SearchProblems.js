@@ -75,7 +75,7 @@ export default function SearchProblem(){
             {isLoading ? 
                 <ActivityIndicator 
                     size='large'
-                    color='#2576f7'
+                    color='#EF476F'
                     style={styles.indicator}
                 /> : 
                 <ProblemList 
