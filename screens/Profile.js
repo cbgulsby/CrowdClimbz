@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { 
@@ -15,6 +15,7 @@ import ChangeClimbAbility from '../screens/ChangeClimbAbility';
 import ChangePreferredGym from '../screens/ChangePreferredGym';
 import ChangePassword from '../screens/ChangePassword';
 import firebase from '../firebase';
+import ProblemList from '../components/ProblemList';
 
 const Stack = createStackNavigator();
 
@@ -83,6 +84,49 @@ function ProfileScreen({navigation}){
         }
     });
 
+
+//begin
+
+    const [problems, setProblems] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+
+    const ref = firebase.firestore().collection('problems');
+
+  useEffect(() => {
+    setLoading(true)
+    return ref.onSnapshot(querySnapshot => {
+      const tempProblems = [];
+      querySnapshot.forEach(doc => {
+        const{
+          betaVideo,
+          date,
+          description,
+          grade,
+          gym,
+          inappropriateFlag,
+          name,
+          outOfDateFlag,
+          photo,
+          time,
+          user
+        } = doc.data();
+
+        tempProblems.push({
+          problemInfo: {
+              gymName: gym,
+              user: user,
+              grade: grade,
+              problemName: name,
+          },
+          key: doc.id
+      })
+      });
+      setProblems(tempProblems);
+      setLoading(false);
+    });
+  }, []);
+
+
     //var user = dbh.collection('users').doc(currentUser.uid).data();
     //var ability = dbh.collection('users').doc(currentUser.uid).get();
 
@@ -135,11 +179,7 @@ function ProfileScreen({navigation}){
                         </View>
                     ) : (
                         
-                        <FlatList 
-                            data={sampleData}
-                            renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
-                            keyExtractor={item => item.id} 
-                        />
+                        <ProblemList problems={problems} />
 
                     )}
                 </View>
@@ -192,7 +232,7 @@ const styles = StyleSheet.create({
         flex: 1, 
         margin: 5,
         //padding: 2,
-        borderRadius: 10,
+        borderRadius: 5,
         alignContent: 'center',
         justifyContent: 'center',
         borderColor: 'black',
@@ -211,7 +251,7 @@ const styles = StyleSheet.create({
         borderColor: 'black', 
         borderWidth: 1, 
         margin: 3,
-        borderRadius: 10
+        borderRadius: 5
     },
     profileEditText: {
         fontSize: 30, 
@@ -225,7 +265,7 @@ const styles = StyleSheet.create({
         margin: 3, 
         justifyContent: 'center', 
         alignItems: 'center',
-        borderRadius: 10
+        borderRadius: 5
     }
 
 });

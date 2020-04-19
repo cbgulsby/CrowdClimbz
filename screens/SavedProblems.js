@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -9,76 +9,61 @@ import {
     TouchableOpacity
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
+import firebase from '../firebase';
+import ProblemList from '../components/ProblemList';
 
-
-const sampleData = [
-    {
-        id: '1',
-        problemName: 'I Hate Mondays',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 2,
-    },
-    {
-        id: '2',
-        problemName: 'Going Up',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 0,
-    },
-    {
-        id: '3',
-        problemName: 'Going Down',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 5,
-    },
-    {
-        id: '4',
-        problemName: 'Bottomless Fries',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 3,
-    },
-    {
-        id: '5',
-        problemName: 'All Uphill From Here',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 4,
-    },
-    {
-        id: '6',
-        problemName: 'Angry Monkeys',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 4,
-    },
-    {
-        id: '7',
-        problemName: 'Jeon Jungkook',
-        gymLocation: 'B.bloc Climbing Gangnam',
-        problemLevel: 9,
-    },
-    {
-        id: '8',
-        problemName: 'Seagulls Stop It',
-        gymLocation: 'Dagobah',
-        problemLevel: 2,
-    },
-    {
-        id: '9',
-        problemName: 'Space Mountain',
-        gymLocation: 'Witt Center',
-        problemLevel: 1,
-    },
-]
 
 
 export default function SavedProblems(){
+    
+
+    const [problems, setProblems] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+
+    const ref = firebase.firestore().collection('problems');
+
+    useEffect(() => {
+    setLoading(true)
+    return ref.onSnapshot(querySnapshot => {
+      const tempProblems = [];
+      querySnapshot.forEach(doc => {
+        const{
+          betaVideo,
+          date,
+          description,
+          grade,
+          gym,
+          inappropriateFlag,
+          name,
+          outOfDateFlag,
+          photo,
+          time,
+          user
+        } = doc.data();
+
+        tempProblems.push({
+          problemInfo: {
+              gymName: gym,
+              user: user,
+              grade: grade,
+              problemName: name,
+          },
+          key: doc.id
+      })
+      });
+      setProblems(tempProblems);
+      setLoading(false);
+    });
+  }, []);
+
+
+
     return(
         <SafeAreaView style={styles.container}>
-            <Text> Saved Problems </Text>
+            <Text style={{fontSize: 30, color: '#073B4C', fontWeight: 'bold'}}>Saved Problems</Text>
 
-            <FlatList
-                data={sampleData}
-                renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
-                keyExtractor={item => item.id} 
-            />
+            <ProblemList problems={problems} />
+
         </SafeAreaView>
     );
 }
@@ -86,7 +71,9 @@ export default function SavedProblems(){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 24,
-        backgroundColor: '#4fb9ff',
-        flex: 1
+        backgroundColor: '#118AB2',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
