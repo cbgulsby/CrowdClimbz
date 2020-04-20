@@ -6,7 +6,7 @@ import {
     View
 } from 'react-native';
 
-export default function ProblemCardScreen() {
+export default function ProblemCardScreen({navigation}) {
     return (
         <View style = { styles.container }>
             <Text>Hello</Text>

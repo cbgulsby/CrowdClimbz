@@ -1,13 +1,17 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Home from '../screens/Home';
 import Problem from '../screens/Problem';
 import Profile from '../screens/Profile';
 import SavedProblems from '../screens/SavedProblems';
 import SearchGyms from '../screens/SearchGyms';
 import SearchProblems from '../screens/SearchProblems';
+import ProblemCardScreen from '../screens/ProblemCardScreen';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function SideMenu() {
   return (
@@ -15,9 +19,15 @@ export default function SideMenu() {
       <Drawer.Screen
         name="Home"
         title='Home'
-        component={Home}
         options={{ drawerLabel: 'Home' }}
-      />
+      >
+      { () => (
+        <Stack.Navigator screenOptions = {{headerShown: false}}>
+          <Stack.Screen name = "Home" component = {Home}/>
+          <Stack.Screen name = "ProblemCardScreen" component = {ProblemCardScreen}/>
+        </Stack.Navigator>
+      )}
+      </Drawer.Screen>
       <Drawer.Screen
         name="Search Gyms"
         component={SearchGyms}

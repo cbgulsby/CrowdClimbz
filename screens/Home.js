@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { 
   View, 
   Text, 
-  SafeAreaView, 
+  SafeAreaView,
   StyleSheet, 
   FlatList
 } from 'react-native';
@@ -44,7 +44,7 @@ export default function Home({navigation}) {
       <FlatList
          style={{width: 350}}
          data={problems}
-         renderItem={({item}) => <ProblemCard id={item.id} problemName={item.name} gymLocation={item.gym} problemLevel={item.grade} />} 
+         renderItem={({item}) => <ProblemCard id={item.id} problemName={item.name} gymLocation={item.gym} problemLevel={item.grade} cardNavigation = {navigation}/>}
          keyExtractor={item => item.id} 
       />
     </View>

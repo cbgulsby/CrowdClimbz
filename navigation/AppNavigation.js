@@ -1,21 +1,17 @@
 import React from 'react';
-import { 
-    createSwitchNavigator, 
-    createAppContainer 
-} from 'react-navigation';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import AuthenticationNavigation from './AuthenticationNavigation';
 import SideMenu from './SideMenu';
 
-const AppNavigation = createAppContainer(createSwitchNavigator(
-    {
-        Authentication: {
-            screen: AuthenticationNavigation
-        },
-        SideMenu: {
-            screen: SideMenu
-        }
-    }
-));
+const Stack = createStackNavigator();
 
-export default AppNavigation;
+export default function AppNavigation() {
+    return (
+        <Stack.Navigator screenOptions = {{headerShown: false}}>
+            <Stack.Screen name = "Authentication" component = {AuthenticationNavigation}/>
+            <Stack.Screen name = "SideMenu" component = {SideMenu}/>
+        </Stack.Navigator>
+    )
+}
+
