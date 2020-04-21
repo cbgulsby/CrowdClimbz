@@ -64,6 +64,7 @@ function ProfileScreen({navigation}){
     const [currentUserUsername, setCurrentUser] = useState("");
     const [currentClimbingAbility, setClimbingAbility] = useState("");
     const [currentPreferredGym, setPreferredGym] = useState("");
+    //const [sizeProblems, setSizeProblems] = useState(0);
 
     const [view, setView] = useState(0);
 
@@ -110,16 +111,26 @@ function ProfileScreen({navigation}){
           time,
           user
         } = doc.data();
-
-        tempProblems.push({
-          problemInfo: {
-              gymName: gym,
-              user: user,
-              grade: grade,
-              problemName: name,
-          },
-          key: doc.id
-      })
+        if (user == currentUserUsername){
+            tempProblems.push({
+              problemInfo: {
+                  gymName: gym,
+                  user: user,
+                  grade: grade,
+                  problemName: name,
+              },
+              key: doc.id
+            })
+        }
+      //   tempProblems.push({
+      //     problemInfo: {
+      //         gymName: gym,
+      //         user: user,
+      //         grade: grade,
+      //         problemName: name,
+      //     },
+      //     key: doc.id
+      // })
       });
       setProblems(tempProblems);
       setLoading(false);
@@ -129,6 +140,7 @@ function ProfileScreen({navigation}){
 
     //var user = dbh.collection('users').doc(currentUser.uid).data();
     //var ability = dbh.collection('users').doc(currentUser.uid).get();
+
 
     return(
         <SafeAreaView style={styles.container}>
@@ -178,9 +190,7 @@ function ProfileScreen({navigation}){
                             
                         </View>
                     ) : (
-                        
                         <ProblemList problems={problems} />
-
                     )}
                 </View>
 
