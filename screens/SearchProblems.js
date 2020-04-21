@@ -70,17 +70,68 @@ export default function SearchProblem(){
 
     function sortProblems(sortValue) {
         setSelectedValue(sortValue)
-        if(sortValue == 'name') {
+        if(sortValue == 'ascendingName') {
             let temp = problems;
 
             console.log(temp)
 
             temp.sort(function (a, b) {
                 console.log("a => ", a)
-                if (a.problemInfo.gymName > b.problemInfo.gymName) {
+                if (a.problemInfo.problemName > b.problemInfo.problemName) {
                     return 1;
                 }
-                if (a < b) {
+                if (a.problemInfo.problemName < b.problemInfo.problemName) {
+                    return -1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+        else if(sortValue == 'descendingName') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.problemName > b.problemInfo.problemName) {
+                    return -1;
+                }
+                if (a.problemInfo.problemName < b.problemInfo.problemName) {
+                    return 1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+        else if(sortValue == 'ascendingDate') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.date > b.problemInfo.date) {
+                    return -1;
+                }
+                if (a.problemInfo.date < b.problemInfo.date) {
+                    return 1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+        else if(sortValue == 'descendingDate') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.date > b.problemInfo.date) {
+                    return 1;
+                }
+                if (a.problemInfo.date < b.problemInfo.date) {
                     return -1;
                 }
                 return 0
@@ -97,12 +148,14 @@ export default function SearchProblem(){
                 placeholder="Enter Gym Name"
             />
             <Picker 
-                style={{backgroundColor: 'white', height: 30, width: '97.5%', alignSelf: 'center'}}
+                style={{backgroundColor: 'white', height: 25, width: '97%', marginBottom: 5, alignSelf: 'center'}}
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => sortProblems(itemValue)}
             >
-                <Picker.Item label="Date" value="date" />
-                <Picker.Item label="Name" value="name" />
+                <Picker.Item label="Newest to Oldest" value="ascendingDate" />
+                <Picker.Item label="Oldest to Newest" value="descendingDate" />
+                <Picker.Item label="Problem Name A to Z" value="ascendingName" />
+                <Picker.Item label="Problem Name Z to A" value="descendingName" />
             </Picker>
             {isLoading ? 
                 <ActivityIndicator 
