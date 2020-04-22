@@ -3,11 +3,13 @@ import {
     StyleSheet, 
     Text, 
     View, 
-    Button, 
+    TouchableOpacity, 
     TextInput,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
 import firebase from '../firebase';
+import logo from '../assets/logo.png'
 
 console.disableYellowBox = true;
 
@@ -59,7 +61,16 @@ export default function Login({navigation}) {
 
     return(
         <View style = { styles.container }>
-            <Text>Login</Text>
+            <Image 
+                source={logo}
+                style={{height: 230, width: 260, marginBottom: 10}}
+            />
+            {/* <Text
+                // color="white"
+                style={styles.titleText}
+            >
+                Login
+            </Text> */}
             <TextInput
                 style = { styles.textInput }
                 autoCapitalize = 'none'
@@ -79,18 +90,30 @@ export default function Login({navigation}) {
                 }
                 value = { pass }
             />
-            <Button
-                title = 'Login'
+            <TouchableOpacity
+                style={styles.buttonStyle}
                 onPress = {
                     () => { login(email, pass, navigation) }
                 }
-            />
-            <Button
-                title = "Don't have an account?"
+            >
+                <Text
+                    style={styles.buttonTextStyle}
+                >
+                    Login
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.buttonStyle}
                 onPress = {
                     () => navigation.navigate('SignUp')
                 }
-            />
+            >
+               <Text
+                    style={styles.buttonTextStyle}
+                >
+                    Don't have an account?
+                </Text> 
+            </TouchableOpacity>
         </View>
     );
 }
@@ -98,15 +121,37 @@ export default function Login({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#073B4C',
         alignItems: 'center',
         justifyContent: 'center'
     },
     textInput: {
         height: 40,
         width: '90%',
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginTop: 8
+        backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: 2,
+        marginTop: 8,
+        borderRadius: 5,
+        paddingLeft: 5
+    },
+    titleText: {
+        color: 'white',
+        fontSize: 28
+    },
+    buttonStyle: {
+        backgroundColor: '#118ab2',
+        height: 40,
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: 'white'
     }
 })
