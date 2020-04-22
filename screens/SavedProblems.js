@@ -17,8 +17,31 @@ import ProblemList from '../components/ProblemList';
 export default function SavedProblems(){
     
 
+
+    const [userSavedProblems, setUserSavedProblems] = useState([]);
+    //const [sizeProblems, setSizeProblems] = useState(0);
+
+    const [view, setView] = useState(0);
+
+    const currentUserUID = firebase.auth().currentUser.uid;
+    
+    const dbh = firebase.firestore();
+
+    dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+        if (!querySnapshot.empty){
+            var doc = querySnapshot.docs[0];
+            console.log("DOCUMENT DATA:", doc.data());
+            setUserSavedProblems(doc.data().saved);
+            console.log("Saved Problems: ", userSavedProblems);
+        }
+        else {
+            console.log("No such document");
+        }
+    });
+
     const [problems, setProblems] = useState([]);
     const [isLoading, setLoading] = useState(false);
+
 
     const ref = firebase.firestore().collection('problems');
 
@@ -41,16 +64,21 @@ export default function SavedProblems(){
           user
         } = doc.data();
 
-        tempProblems.push({
-          problemInfo: {
-              gymName: gym,
-              user: user,
-              grade: grade,
-              problemName: name,
-          },
-          key: doc.id
-      })
+        if (userSavedProblems.includes(doc.id))
+        {
+          tempProblems.push({
+            problemInfo: {
+                gymName: gym,
+                user: user,
+                grade: grade,
+                problemName: name,
+            },
+            key: doc.id
+          })
+        }
+        
       });
+
       setProblems(tempProblems);
       setLoading(false);
     });
