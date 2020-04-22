@@ -36,10 +36,18 @@ export default function Home({navigation}) {
 
         tempProblems.push({
           problemInfo: {
-              gymName: gym,
-              user: user,
+              betaVideo: betaVideo,
+              cardNavigation: navigation,
+              date: date,
+              description: description,
               grade: grade,
+              gymName: gym,
+              inappropriateFlag: inappropriateFlag,
+              outOfDateFlag: outOfDateFlag,
               problemName: name,
+              photo: photo,
+              time: time,
+              user: user,
           },
           key: doc.id
       })

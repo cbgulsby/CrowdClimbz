@@ -5,7 +5,21 @@ const screenWidth = Dimensions.get('window').width - 10;
 
 export default function TempProblemCard(props) {
     return (
-        <TouchableOpacity style={styles.container} onPress = {() => {props.cardNavigation.navigate("ProblemCardScreen")}}>
+        <TouchableOpacity style={styles.container} onPress = {() => {
+            props.problemInfo.cardNavigation.navigate("ProblemCardScreen", {
+                betaVideo: props.problemInfo.betaVideo,
+                cardNavigation: props.problemInfo.cardNavigation,
+                date: props.problemInfo.date,
+                description: props.problemInfo.description,
+                grade: props.problemInfo.grade,
+                gymName: props.problemInfo.gymName,
+                inappropriateFlag: props.problemInfo.inappropriateFlag,
+                outOfDateFlag: props.problemInfo.outOfDateFlag,
+                problemName: props.problemInfo.problemName,
+                photo: props.problemInfo.photo,
+                time: props.problemInfo.time,
+                user: props.problemInfo.user,
+            })}}>
             <View style={styles.leftInnerContainer}>
                 <View style={styles.gymNameContainer}>
                     <Text 
