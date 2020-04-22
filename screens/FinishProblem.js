@@ -21,7 +21,7 @@ export function checkName(name){
     }
 
 export function checkGym(name){
-    	if(name == "") return 1;
+    	if(name == "noneSelected") return 1;
     	else return 0;
     }
 
@@ -51,22 +51,44 @@ export default function FinishProblem( {navigation, route}){
 	const currentUserUID = firebase.auth().currentUser.uid;
 	const [currentUserUsername, setCurrentUser] = useState("");
 	const [problemVideo, setProblemVideo] = useState([]);
+	const [hasUser, setUserFlag] = useState(0);
 	
-	db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
-		if (!querySnapshot.empty){
-			var doc = querySnapshot.docs[0];
-			console.log("DOCUMENT DATA:", doc.data());
-			setCurrentUser(doc.data().username);
-		} else{
-			console.log("No such document");
-		}
-	});
+	//get username
+	if(hasUser == 0){
+		db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+			if (!querySnapshot.empty){
+				var doc = querySnapshot.docs[0];
+				console.log("DOCUMENT DATA:", doc.data());
+				setCurrentUser(doc.data().username);
+			} else{
+				console.log("No such document");
+			}
+		});
+		setUserFlag(1);
+	}
 
+	//get gyms
+	const [gymChoices, setGymChoices] = useState([]);
+	db.collection("SearchGymsCollection").orderBy("gymName")
+		.onSnapshot(function(querySnapshot) {
+			const tempGyms = [{gymName: "Choose Gym", gymValue: "noneSelected"}];
+			querySnapshot.forEach(doc => {
+				const {
+					gymName
+				} = doc.data();
+			tempGyms.push({
+				gymName: gymName,
+		    	gymValue: gymName
+			});
+			});
+			setGymChoices(tempGyms);
+		});
+
+		
 	async function pickVideo(){
 	    let result = await ImagePicker.launchImageLibraryAsync({
 	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
 	    });
-	    console.log("HERE");
 	    console.log(result);
 
 	    if (!result.cancelled) {
@@ -74,6 +96,11 @@ export default function FinishProblem( {navigation, route}){
 	      	setVideoFlag(1);
 	    }
 	};
+
+	function pickerList(pickerData) {
+        return( pickerData.map( (x) => { 
+              return( <Picker.Item label={x.gymName} key={x.gymName} value={x.gymValue}  />)} ));
+    };
 
     function postProblem() {
     	var curDate = new Date().toISOString().substring(0,10);
@@ -126,7 +153,7 @@ export default function FinishProblem( {navigation, route}){
 	});
 	navigation.navigate('Home');
 	}
-
+	
 	return(
 		<SafeAreaView style={styles.container}>
 			<View style={{flexDirection:'row', paddingBottom: 20, marginLeft: 10}}>
@@ -172,11 +199,23 @@ export default function FinishProblem( {navigation, route}){
 	  			<Picker.Item label="V14" value="14" />
 	  			<Picker.Item label="V15" value="15" />
 	        	</Picker>
-	        	<TextInput
-	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2, marginBottom: 20}}
-	        		placeholder="Gym: N/A"
-	        		onChangeText={(text) => setGym(text)}
+	        	<Picker style={{borderColor: 'gray', borderWidth: 2}}
+	        		prompt='Choose Gym'
+	        		mode='dropdown'
+	        		selectedValue = {problemGym}
+	        		style={{height: 40, width: 350}}
+	        		onValueChange={(itemValue, itemIndex) =>
+    				setGym(itemValue)
+ 					}
+	  			>
+	  			{pickerList(gymChoices)}
+	  			</Picker>
+	        	<Button
+	        		title = "If you can't find the right gym, add a new gym here!"
+	        		style={{marginBottom: 20}}
+	        		onPress={() => navigation.navigate('Add Gym')}
 	        	/>
+	        	<Text></Text>
 	        	<Button
 	        		title = "Add beta video"
 	        		style={{marginBottom: 20}}
