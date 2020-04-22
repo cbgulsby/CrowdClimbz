@@ -2,16 +2,111 @@ import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
-    View
+    View,
+    TextInput,
+    Button,
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import BackIcon from 'react-native-vector-icons/Ionicons';
 
-export default function ProblemCardScreen({route, navigation}) {
+import firebase from '../firebase';
+import CommentList from '../components/CommentList';
+
+async function postComment(commentText, problemRef) {
+    if (checkComment(commentText) == -1) {
+        Alert.alert("Cannot post blank comment");
+        return;
+    }
+    var uid = firebase.auth().currentUser.uid;
+    console.log(uid.toString());
+    var username = (await firebase.firestore().collection('users').doc(uid).get()).get('username');
+    var currentCommentNum = (await problemRef.get()).get('numComments');
+    console.log(currentCommentNum);
+    console.log(username.toString());
+    try {
+        await problemRef.collection('comments').add({
+            username: username,
+            commentText: commentText,
+            date: new Date().toISOString().substring(0,10),
+            time: new Date().toISOString().substring(11,19),
+        })
+        .then(() => {
+            problemRef.update({
+                numComments: (currentCommentNum + 1)
+            })
+        })
+        .then(() => {
+            console.log("Successfully posted comment")
+        })
+    }
+    catch (error) {
+        console.log(error.toString());
+    }
+}
+
+function checkComment(commentText) {
+    if (commentText.length == 0) {
+        return -1;
+    }
+    return 0;
+}
+
+export default function CommentScreen({route, navigation}) {
     const [isLoading, setLoading] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [commentsExist, setCommentStatus] = useState(true);
+    const [commentText, setCommentText] = useState('');
+
+    const { betaVideo } = route.params;
+    const { cardNavigation } = route.params;
+    const { date } = route.params;
+    const { description } = route.params;
+    const { documentId } = route.params;
+    const { grade } = route.params;
+    const { gymName } = route.params;
+    const { inappropriateFlag } = route.params;
+    const { numComments } = route.params;
+    const { outOfDateFlag } = route.params;
+    const { problemName } = route.params;
+    const { photo } = route.params;
+    const { time } = route.params;
+    const { user } = route.params;
+
+    const problemRef = firebase.firestore().collection('problems').doc(documentId);
+    const commentRef = firebase.firestore().collection('problems').doc(documentId).collection('comments');
 
     useEffect(() => {
         setLoading(true)
-        setLoading(false)
+        if (numComments == 0) {
+            setCommentStatus(false)
+        }
+        else {
+            return commentRef.onSnapshot(querySnapshot => {
+                const tempComments = [];
+                querySnapshot.forEach(doc => {
+                    const {
+                        commentText,
+                        date,
+                        time,
+                        username
+                    } = doc.data();
+
+                    tempComments.push({
+                        commentInfo: {
+                            commentText: commentText,
+                            date: date,
+                            time: time,
+                            username: username,
+                        },
+                        key: doc.id
+                    })
+                })
+                setComments(tempComments);
+                setCommentStatus(true)
+                setLoading(false)
+            })
+        }
     }, [])
     
     return (
@@ -22,7 +117,44 @@ export default function ProblemCardScreen({route, navigation}) {
                     () => navigation.goBack()
                 }
             />
-            <Text>Hello</Text>
+            
+            {commentsExist ?
+                <>
+                    {isLoading ?
+                        <>
+                            <Text>Loading Comments...</Text>
+                            <ActivityIndicator
+                                size = 'large'
+                            />
+                        </>
+                        :
+                        <>
+                            <CommentList 
+                                comments = {comments}
+                            />
+                        </>
+                    }
+                </>
+                :
+                <>
+                    <Text>No Comments</Text>
+                </>
+            }
+
+            <TextInput
+                autoCapitalize = 'none'
+                placeholder = 'Comment'
+                onChangeText = {
+                    (commentText) => setCommentText(commentText)
+                }
+                value = { commentText }
+            />
+            <Button
+                title = "Post Comment"
+                onPress = {
+                    () => postComment(commentText, problemRef)
+                }
+            />
         </View>
     );
 }

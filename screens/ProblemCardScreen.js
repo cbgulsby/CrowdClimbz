@@ -25,9 +25,11 @@ export default function ProblemCardScreen({route, navigation}) {
     const { cardNavigation } = route.params;
     const { date } = route.params;
     const { description } = route.params;
+    const { documentId } = route.params;
     const { grade } = route.params;
     const { gymName } = route.params;
     const { inappropriateFlag } = route.params;
+    const { numComments } = route.params;
     const { outOfDateFlag } = route.params;
     const { problemName } = route.params;
     const { photo } = route.params;
@@ -51,11 +53,14 @@ export default function ProblemCardScreen({route, navigation}) {
     
     return (
         <View style = { styles.container }>
+            <BackIcon
+                name = 'ios-arrow-back'
+                onPress = {
+                    () => navigation.goBack()
+                }
+            />
             {isLoading ?
                 <>
-                    <BackIcon
-                        name = 'ios-arrow-back'
-                    />
                     <Text>Loading Post...</Text>
                     <ActivityIndicator
                         size = 'large'
@@ -63,13 +68,8 @@ export default function ProblemCardScreen({route, navigation}) {
                 </>
                 :
                 <>
-                    <BackIcon
-                        name = 'ios-arrow-back'
-                        onPress = {
-                            () => navigation.goBack()
-                        }
-                    />
                     <Text>username: {user}</Text>
+                    <Text>document Id: {documentId}</Text>
                     <Text>problem name: {problemName}</Text>
                     <Text>gym name: {gymName}</Text>
                     <Text>grade: V{grade}</Text>
@@ -90,7 +90,22 @@ export default function ProblemCardScreen({route, navigation}) {
                     <CommentIcon
                         name = 'comment'
                         onPress = {
-                            () => navigation.navigate("CommentScreen")
+                            () => navigation.navigate("CommentScreen", {
+                                betaVideo: betaVideo,
+                                cardNavigation: cardNavigation,
+                                date: date,
+                                description: description,
+                                documentId: documentId,
+                                grade: grade,
+                                gymName: gymName,
+                                inappropriateFlag: inappropriateFlag,
+                                numComments: numComments,
+                                outOfDateFlag: outOfDateFlag,
+                                problemName: problemName,
+                                photo: photo,
+                                time: time,
+                                user: user,
+                            })
                         }
                     />
                     <Text>description: {description}</Text>
