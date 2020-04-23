@@ -76,7 +76,14 @@ export default function CapturePhoto({navigation, route}){
 			          </TouchableOpacity>
 			        </View>
 			      </Camera>
-			      <Button title="Take Photo" onPress={snap}/>
+			      <View style={{alignItems:'center'}}>
+			      <TouchableOpacity
+			      	style={styles.buttonStyle}
+			      	onPress={snap}
+			      >
+			      <Text style={styles.buttonTextStyle}>Take Photo</Text>
+			      </TouchableOpacity>
+			      </View>
       		</View>
     	</SafeAreaView>
 	);
@@ -85,7 +92,22 @@ export default function CapturePhoto({navigation, route}){
 const styles = StyleSheet.create({
   container: {
       paddingTop: 24,
-      backgroundColor: '#4fb9ff',
+      backgroundColor: '#118AB2',
       flex: 1
-  }
+  },
+  buttonStyle: {
+        backgroundColor: '#06D6A0',
+        height: 40,
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: '#073B4C'
+    }
 });

@@ -8,8 +8,11 @@ import {
   TextInput,
   Picker,
   Image,
-  Alert
+  Alert,
+  TouchableOpacity,
+  ImageBackground
 } from 'react-native';
+import {NavigationActions} from 'react-navigation';
 import firebase from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
 console.disableYellowBox = true; 
@@ -21,15 +24,15 @@ export function checkName(name){
     }
 
 export function checkGym(name){
-    	if(name == "") return 1;
+    	if(name == "noneSelected") return 1;
     	else return 0;
     }
 
-async function uploadImage(uri, username, problemName){
+async function uploadImage(uri, username, problemName, problemNumber){
 	const response = await fetch(uri);
 	const blob = await response.blob();
 
-	var ref = firebase.storage().ref('problemPhotos').child(username).child(problemName);
+	var ref = firebase.storage().ref('problemPhotos').child(username).child(problemName).child(problemNumber);
 	ref.put(blob);
 }
 
@@ -51,22 +54,44 @@ export default function FinishProblem( {navigation, route}){
 	const currentUserUID = firebase.auth().currentUser.uid;
 	const [currentUserUsername, setCurrentUser] = useState("");
 	const [problemVideo, setProblemVideo] = useState([]);
+	const [hasUser, setUserFlag] = useState(0);
 	
-	db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
-		if (!querySnapshot.empty){
-			var doc = querySnapshot.docs[0];
-			console.log("DOCUMENT DATA:", doc.data());
-			setCurrentUser(doc.data().username);
-		} else{
-			console.log("No such document");
-		}
-	});
+	//get username
+	if(hasUser == 0){
+		db.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+			if (!querySnapshot.empty){
+				var doc = querySnapshot.docs[0];
+				console.log("DOCUMENT DATA:", doc.data());
+				setCurrentUser(doc.data().username);
+			} else{
+				console.log("No such document");
+			}
+		});
+		setUserFlag(1);
+	}
 
+	//get gyms
+	const [gymChoices, setGymChoices] = useState([]);
+	db.collection("SearchGymsCollection").orderBy("gymName")
+		.onSnapshot(function(querySnapshot) {
+			const tempGyms = [{gymName: "Choose Gym", gymValue: "noneSelected"}];
+			querySnapshot.forEach(doc => {
+				const {
+					gymName
+				} = doc.data();
+			tempGyms.push({
+				gymName: gymName,
+		    	gymValue: gymName
+			});
+			});
+			setGymChoices(tempGyms);
+		});
+
+		
 	async function pickVideo(){
 	    let result = await ImagePicker.launchImageLibraryAsync({
 	      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
 	    });
-	    console.log("HERE");
 	    console.log(result);
 
 	    if (!result.cancelled) {
@@ -74,6 +99,11 @@ export default function FinishProblem( {navigation, route}){
 	      	setVideoFlag(1);
 	    }
 	};
+
+	function pickerList(pickerData) {
+        return( pickerData.map( (x) => { 
+              return( <Picker.Item label={x.gymName} key={x.gymName} value={x.gymValue}  />)} ));
+    };
 
     function postProblem() {
     	var curDate = new Date().toISOString().substring(0,10);
@@ -90,7 +120,14 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
-    	uploadImage(data.uri, currentUserUsername, problemName)
+    	uploadImage(data.oldImage, currentUserUsername, problemName, '1')
+    		.then(() => {
+    			console.log('Image uploaded successfully');
+    		})
+    		.catch((error) => {
+    			console.log(error);
+    		});
+    	uploadImage(data.image, currentUserUsername, problemName, '2')
     		.then(() => {
     			console.log('Image uploaded successfully');
     		})
@@ -124,29 +161,35 @@ export default function FinishProblem( {navigation, route}){
 	.catch(function(error) {
 	    console.error("Error writing document: ", error);
 	});
-	navigation.navigate('Home');
+	navigation.navigate('Start New Problem');
 	}
-
+	
 	return(
 		<SafeAreaView style={styles.container}>
 			<View style={{flexDirection:'row', paddingBottom: 20, marginLeft: 10}}>
+         	 	<ImageBackground
+         	 		style={{height:150, width:150}}
+         	 		source={{uri: data.oldImage}}
+         	 	>
          	 	<Image 
          	 		style={{height:150, width:150}}
-         	 		source={{ uri: data.uri }} 
+         	 		source={{ uri: data.image }} 
          	 	/>
+         	 	</ImageBackground>
 				<TextInput
-	         	 	style={{height: 150, width: 225, borderColor: 'gray', borderWidth: 2}}
+					multiline
+	         	 	style={{height: 150, borderRadius: 5, width: 225, color:'#073B4C', paddingLeft: 10, paddingRight: 10, borderColor: '#073B4C', borderWidth: 2}}
 	         		placeholder="Add description here!"
 	         		onChangeText={(text) => setDescription(text)}
 	        	/>
 	        </View>
-	        <View style={{paddingBottom: 20, marginLeft: 15, marginRight: 15}}>
+	        <View style={{paddingBottom: 20, marginLeft: 15, marginRight: 15, alignItems:'center'}}>
 	        	<TextInput
-	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
+	        		style={{height: 40, borderRadius: 5,width: 350, color:'#073B4C', paddingLeft: 10, borderColor: '#073B4C', borderWidth: 2}}
 	        		placeholder="Problem Name: N/A"
 	        		onChangeText={(text) => setProblemName(text)}
 	        	/>
-	        	<Picker style={{borderColor: 'gray', borderWidth: 2}}
+	        	<Picker itemStyle={{color:'#073B4C'}} style={{borderColor: '#073B4C', borderWidth: 2}}
 	        		prompt='Choose Grade'
 	        		mode='dropdown'
 	        		selectedValue = {problemGrade}
@@ -172,24 +215,49 @@ export default function FinishProblem( {navigation, route}){
 	  			<Picker.Item label="V14" value="14" />
 	  			<Picker.Item label="V15" value="15" />
 	        	</Picker>
-	        	<TextInput
-	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2, marginBottom: 20}}
-	        		placeholder="Gym: N/A"
-	        		onChangeText={(text) => setGym(text)}
-	        	/>
-	        	<Button
-	        		title = "Add beta video"
-	        		style={{marginBottom: 20}}
+	        	<Picker itemStyle={{color:'#073B4C'}} style={{borderColor: '#073B4C', borderWidth: 2}}
+	        		prompt='Choose Gym'
+	        		mode='dropdown'
+	        		selectedValue = {problemGym}
+	        		style={{height: 40, width: 350}}
+	        		onValueChange={(itemValue, itemIndex) =>
+    				setGym(itemValue)
+ 					}
+	  			>
+	  			{pickerList(gymChoices)}
+	  			</Picker>
+	        	<TouchableOpacity
+	        		style={{backgroundColor: '#06D6A0',
+				        height: 40,
+				        width: '90%',
+				        alignItems: 'center',
+				        justifyContent: 'center',
+				        margin: 5,
+				        borderWidth: 2,
+				        borderColor: '#073B4C',
+				        borderRadius: 5
+				    }}
+	        		onPress={() => navigation.navigate('Add Gym')}
+	        	>
+	        	<Text style={styles.buttonTextStyle}>Can't find your gym? Add a new gym!</Text>
+	        	</TouchableOpacity>
+	        	<Text></Text>
+	        	<TouchableOpacity
+	        		style={styles.buttonStyle}
 	        		onPress={() => pickVideo()}
-	        	/>
+	        	>
+	        	<Text style={styles.buttonTextStyle}>Add Beta Video</Text>
+	        	</TouchableOpacity>
 	        	{problemVideoFlag == 1 &&
-	        		<Text>Video added!</Text>
+	        		<Text style={styles.buttonTextStyle}>Video added!</Text>
 	        	}
 	        	<Text></Text>
-	        	<Button
-	        		title = "Post Problem!"
+	        	<TouchableOpacity
+	        		style={styles.buttonStyle}
 	        		onPress={() => postProblem()}
-	        	/>
+	        	>
+	        	<Text style={styles.buttonTextStyle}>Post Problem!</Text>
+	        	</TouchableOpacity>
 			</View>
 		</SafeAreaView>
 	);
@@ -198,10 +266,25 @@ export default function FinishProblem( {navigation, route}){
 const styles = StyleSheet.create({
   container: {
       paddingTop: 24,
-      backgroundColor: '#4fb9ff',
+      backgroundColor: '#118AB2',
       flex: 1
   },
   rowContainer: {
   	flexDirection: 'row'
-  }
+  },
+   buttonStyle: {
+        backgroundColor: '#06D6A0',
+        height: 40,
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: '#073B4C'
+    }
 });
