@@ -37,24 +37,39 @@ function ProfileScreen({navigation}){
     
     const dbh = firebase.firestore();
 
-if (flag1){
+// if (flag1){
 
 
-    dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
-        if (!querySnapshot.empty){
-            var doc = querySnapshot.docs[0];
-            console.log("DOCUMENT DATA:", doc.data());
-            setCurrentUser(doc.data().username);
-            setClimbingAbility(doc.data().climbingAbility);
-            setPreferredGym(doc.data().preferredGym);
-        }
-        else {
-            console.log("No such document");
-        }
+//     dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+//         if (!querySnapshot.empty){
+//             var doc = querySnapshot.docs[0];
+//             console.log("DOCUMENT DATA:", doc.data());
+//             setCurrentUser(doc.data().username);
+//             setClimbingAbility(doc.data().climbingAbility);
+//             setPreferredGym(doc.data().preferredGym);
+//         }
+//         else {
+//             console.log("No such document");
+//         }
+//         setFlag2(1);
+//         setFlag1(0);
+//     });
+// }
+
+
+  useEffect(() => {
+
+    return firebase.firestore().collection('users').where('id', '==', currentUserUID).onSnapshot(querySnapshot => {
+
+        var doc = querySnapshot.docs[0];
+        setCurrentUser(doc.data().username);
+        setClimbingAbility(doc.data().climbingAbility);
+        setPreferredGym(doc.data().preferredGym);
         setFlag2(1);
-        setFlag1(0);
     });
-}
+    
+
+  }, []);
 
     const [problems, setProblems] = useState([]);
     const [isLoading, setLoading] = useState(false);
