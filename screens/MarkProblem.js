@@ -58,7 +58,7 @@ export default class MarkProblem extends Component {
       <ImageBackground 
         style={{
           width: Dimensions.get('window').width,
-         height: 500,
+         height: Dimensions.get('window').width,
          resizeMode: 'contain'
        }} 
         source={{uri: oldUri}} 
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   sketch: {
     width: Dimensions.get('window').width,
-    height: 500,
+    height: Dimensions.get('window').width,
   },
    buttonStyle: {
         backgroundColor: '#06D6A0',
