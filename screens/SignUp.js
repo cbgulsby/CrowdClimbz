@@ -3,11 +3,13 @@ import {
     StyleSheet, 
     Text, 
     View, 
-    Button, 
     TextInput,
-    Alert 
+    Alert,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 import firebase from '../firebase';
+import logo from '../assets/logo.png'
 
 console.disableYellowBox = true;
 
@@ -95,7 +97,11 @@ export default function SignUp({navigation}){
 
     return(
         <View style = { styles.container }>
-            <Text>Sign Up</Text>
+            <Image 
+                source={logo}
+                style={{height: 230, width: 260, marginBottom: 10}}
+            />
+            {/* <Text>Sign Up</Text> */}
             <TextInput
                 style = { styles.textInput }
                 autoCapitalize = 'none'
@@ -124,18 +130,30 @@ export default function SignUp({navigation}){
                 }
                 value = { pass }
             />
-            <Button
-                title = 'Sign Up'
+            <TouchableOpacity
+                style={styles.buttonStyle}
                 onPress = { 
                     () => { signup(email, username, pass, navigation) }
                 }
-            />
-            <Button
-                title = 'Already have an account?'
+            >
+                <Text
+                    style={styles.buttonTextStyle}
+                >
+                    Sign Up
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.buttonStyle}
                 onPress = { 
                     () => navigation.navigate('Login') 
                 }
-            />
+            >
+                <Text
+                    style={styles.buttonTextStyle}
+                >
+                    Already have an account?
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -143,15 +161,33 @@ export default function SignUp({navigation}){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#073B4C',
         alignItems: 'center',
         justifyContent: 'center'
     },
     textInput: {
         height: 40,
         width: '90%',
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginTop: 8
+        backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: 2,
+        marginTop: 8,
+        borderRadius: 5,
+        paddingLeft: 5
+    },
+    buttonStyle: {
+        backgroundColor: '#118ab2',
+        height: 40,
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: 'white'
     }
 })
