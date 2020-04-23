@@ -28,11 +28,11 @@ export function checkGym(name){
     	else return 0;
     }
 
-async function uploadImage(uri, username, problemName){
+async function uploadImage(uri, username, problemName, problemNumber){
 	const response = await fetch(uri);
 	const blob = await response.blob();
 
-	var ref = firebase.storage().ref('problemPhotos').child(username).child(problemName);
+	var ref = firebase.storage().ref('problemPhotos').child(username).child(problemName).child(problemNumber);
 	ref.put(blob);
 }
 
@@ -120,7 +120,14 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
-    	uploadImage(data.image, currentUserUsername, problemName)
+    	uploadImage(data.oldImage, currentUserUsername, problemName, '1')
+    		.then(() => {
+    			console.log('Image uploaded successfully');
+    		})
+    		.catch((error) => {
+    			console.log(error);
+    		});
+    	uploadImage(data.image, currentUserUsername, problemName, '2')
     		.then(() => {
     			console.log('Image uploaded successfully');
     		})

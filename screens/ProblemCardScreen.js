@@ -6,6 +6,7 @@ import {
     Image,
     ActivityIndicator,
     Dimensions,
+    ImageBackground
 } from 'react-native';
 import SaveIcon from 'react-native-vector-icons/AntDesign';
 import CommentIcon from 'react-native-vector-icons/EvilIcons';
@@ -59,7 +60,8 @@ async function unsavePost(documentId) {
 
 export default function ProblemCardScreen({route, navigation}) {
     const [isLoading, setLoading] = useState(false);
-    const [imageUri, setImageUri] = useState('');
+    const [imageUri1, setImageUri1] = useState('');
+    const [imageUri2, setImageUri2] = useState('');
     const [videoExists, setVideoStatus] = useState(false);
     const [videoUri, setVideoUri] = useState('');
     const [isSaved, setSaveStatus] = useState(false);
@@ -80,7 +82,8 @@ export default function ProblemCardScreen({route, navigation}) {
     const { user } = route.params;
 
     var storage = firebase.storage();
-    var imageRef = storage.ref('problemPhotos').child(user).child(problemName);
+    var imageRef1 = storage.ref('problemPhotos').child(user).child(problemName).child('1');
+    var imageRef2 = storage.ref('problemPhotos').child(user).child(problemName).child('2');
     var videoRef;
 
     useEffect(() => {
@@ -100,8 +103,11 @@ export default function ProblemCardScreen({route, navigation}) {
                 setSaveStatus(false)
             }
 
-            await imageRef.getDownloadURL().then(data => {
-                setImageUri(data)
+            await imageRef1.getDownloadURL().then(data => {
+                setImageUri1(data)
+            })
+            await imageRef2.getDownloadURL().then(data => {
+                setImageUri2(data)
             })
             var isVideo = (await firebase.firestore().collection('problems').doc(documentId).get()).get('betaVideo');
             if (isVideo == 0) {
@@ -148,14 +154,16 @@ export default function ProblemCardScreen({route, navigation}) {
                         <Text style = {styles.gradeText}>grade: V{grade}</Text>
                     </View>
                     <View style = {styles.middleContainer}>
+                        <ImageBackground style={styles.image} source={{uri:imageUri1}}>
                         <Image
                             style = {
                                 styles.image
                             }
                             source = {{
-                                uri: imageUri,
+                                uri: imageUri2,
                             }}
                         />
+                        </ImageBackground>
                     </View>
                     <View>
                         <View style = {styles.saveCommentButtonView}>

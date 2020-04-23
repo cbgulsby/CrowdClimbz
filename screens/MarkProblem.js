@@ -11,6 +11,7 @@ import {
   Image,
   ImageBackground,
   Camera,
+  Dimensions
 } from 'react-native';
 import '@expo/browser-polyfill';
 import {captureRef as takeSnapshotAsync} from 'react-native-view-shot';
@@ -55,7 +56,11 @@ export default class MarkProblem extends Component {
       <SafeAreaView style={styles.container}>
       <View style={{flex: 1}}>
       <ImageBackground 
-        style={{height: 500}} 
+        style={{
+          width: Dimensions.get('window').width,
+         height: 500,
+         resizeMode: 'contain'
+       }} 
         source={{uri: oldUri}} 
         resizeMode='contain'
       >
@@ -121,6 +126,7 @@ const styles = StyleSheet.create({
       flex: 1
   },
   sketch: {
+    width: Dimensions.get('window').width,
     height: 500
   },
    buttonStyle: {
