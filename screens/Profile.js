@@ -8,7 +8,8 @@ import {
     SafeAreaView,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
 import ChangeClimbAbility from '../screens/ChangeClimbAbility';
@@ -58,7 +59,6 @@ const sampleData = [
     },
 ]
 
-
 function ProfileScreen({navigation}){
 
     const [currentUserUsername, setCurrentUser] = useState("");
@@ -67,6 +67,7 @@ function ProfileScreen({navigation}){
     //const [sizeProblems, setSizeProblems] = useState(0);
 
     const [view, setView] = useState(0);
+    const [flag, setFlag] = useState(0);
 
     const currentUserUID = firebase.auth().currentUser.uid;
     
@@ -76,68 +77,101 @@ function ProfileScreen({navigation}){
         if (!querySnapshot.empty){
             var doc = querySnapshot.docs[0];
             console.log("DOCUMENT DATA:", doc.data());
-            setCurrentUser(doc.data().username)
+            setCurrentUser(doc.data().username);
             setClimbingAbility(doc.data().climbingAbility);
             setPreferredGym(doc.data().preferredGym);
         }
         else {
             console.log("No such document");
         }
+        setFlag(1);
     });
 
-
-//begin
 
     const [problems, setProblems] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
     const ref = firebase.firestore().collection('problems');
 
-  useEffect(() => {
-    setLoading(true)
-    return ref.onSnapshot(querySnapshot => {
-      const tempProblems = [];
-      querySnapshot.forEach(doc => {
-        const{
-          betaVideo,
-          date,
-          description,
-          grade,
-          gym,
-          inappropriateFlag,
-          name,
-          outOfDateFlag,
-          photo,
-          time,
-          user
-        } = doc.data();
-        if (user == currentUserUsername){
-            tempProblems.push({
-              problemInfo: {
-                  gymName: gym,
-                  user: user,
-                  grade: grade,
-                  problemName: name,
-              },
-              key: doc.id
-            })
-        }
-      //   tempProblems.push({
-      //     problemInfo: {
-      //         gymName: gym,
-      //         user: user,
-      //         grade: grade,
-      //         problemName: name,
-      //     },
-      //     key: doc.id
-      // })
-      });
-      setProblems(tempProblems);
-      setLoading(false);
-    });
-  }, []);
+
+  // useEffect(() => {
+  //   setLoading(true)
+
+  //   return ref.onSnapshot(querySnapshot => {
+  //     const tempProblems = [];
+  //     querySnapshot.forEach(doc => {
+  //       const{
+  //         betaVideo,
+  //         date,
+  //         description,
+  //         grade,
+  //         gym,
+  //         inappropriateFlag,
+  //         name,
+  //         outOfDateFlag,
+  //         photo,
+  //         time,
+  //         user
+  //       } = doc.data();
+        
+  //       if (user == currentUserUsername){
+  //           tempProblems.push({
+  //             problemInfo: {
+  //                 gymName: gym,
+  //                 user: user,
+  //                 grade: grade,
+  //                 problemName: name,
+  //             },
+  //             key: doc.id
+  //           })
+  //       }
+
+  //     });
+  //     setProblems(tempProblems);
+  //     setLoading(false);
+  //   });
+  // }, []);
+
+if (flag)
+{
 
 
+    dbh.collection("problems").where("user", "==", currentUserUsername).get().then(function(querySnapshot) {
+        const tempProblems = [];
+        if (!querySnapshot.empty){
+            var doc = querySnapshot.forEach(doc => {
+                const{
+                  betaVideo,
+                  date,
+                  description,
+                  grade,
+                  gym,
+                  inappropriateFlag,
+                  name,
+                  outOfDateFlag,
+                  photo,
+                  time,
+                  user
+                } = doc.data();
+                
+                tempProblems.push({
+                  problemInfo: {
+                      gymName: gym,
+                      user: user,
+                      grade: grade,
+                      problemName: name,
+                  },
+                  key: doc.id
+                })
+                
+
+              });
+              setProblems(tempProblems);
+              setLoading(false);
+            }
+        });
+    
+}
     //var user = dbh.collection('users').doc(currentUser.uid).data();
     //var ability = dbh.collection('users').doc(currentUser.uid).get();
 
@@ -190,8 +224,11 @@ function ProfileScreen({navigation}){
                             
                         </View>
                     ) : (
-                        <ProblemList problems={problems} />
+                        
+                    <ProblemList problems={problems} />
+                    
                     )}
+
                 </View>
 
             </View>

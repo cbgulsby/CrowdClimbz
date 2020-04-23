@@ -6,7 +6,8 @@ import {
     SafeAreaView,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
 import firebase from '../firebase';
@@ -16,15 +17,10 @@ import ProblemList from '../components/ProblemList';
 
 export default function SavedProblems(){
     
-
-
     const [userSavedProblems, setUserSavedProblems] = useState([]);
-    //const [sizeProblems, setSizeProblems] = useState(0);
-
     const [view, setView] = useState(0);
-
-    const currentUserUID = firebase.auth().currentUser.uid;
     
+    const currentUserUID = firebase.auth().currentUser.uid;
     const dbh = firebase.firestore();
 
     dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
@@ -33,65 +29,79 @@ export default function SavedProblems(){
             console.log("DOCUMENT DATA:", doc.data());
             setUserSavedProblems(doc.data().saved);
             console.log("Saved Problems: ", userSavedProblems);
+            //if (userSavedProblems.length() == 0) setView(1);
+
         }
         else {
             console.log("No such document");
         }
+        setFlag(1);
     });
 
     const [problems, setProblems] = useState([]);
     const [isLoading, setLoading] = useState(false);
-
+    const [flag, setFlag] = useState(0);
 
     const ref = firebase.firestore().collection('problems');
 
-    useEffect(() => {
-    setLoading(true)
-    return ref.onSnapshot(querySnapshot => {
+  if (flag) {
+
+    dbh.collection("problems").get().then(function(querySnapshot) {
+
+      setLoading(true)
       const tempProblems = [];
-      querySnapshot.forEach(doc => {
-        const{
-          betaVideo,
-          date,
-          description,
-          grade,
-          gym,
-          inappropriateFlag,
-          name,
-          outOfDateFlag,
-          photo,
-          time,
-          user
-        } = doc.data();
+        querySnapshot.forEach(doc => {
+          const{
+            betaVideo,
+            date,
+            description,
+            grade,
+            gym,
+            inappropriateFlag,
+            name,
+            outOfDateFlag,
+            photo,
+            time,
+            user
+          } = doc.data();
 
-        if (userSavedProblems.includes(doc.id))
-        {
-          tempProblems.push({
-            problemInfo: {
-                gymName: gym,
-                user: user,
-                grade: grade,
-                problemName: name,
-            },
-            key: doc.id
-          })
-        }
-        
+          if (userSavedProblems.includes(doc.id))
+          {
+            tempProblems.push({
+              problemInfo: {
+                  gymName: gym,
+                  user: user,
+                  grade: grade,
+                  problemName: name,
+              },
+              key: doc.id
+            })
+          }
+          
+        });
+
+        setProblems(tempProblems);
+        setLoading(false);
+
       });
-
-      setProblems(tempProblems);
-      setLoading(false);
-    });
-  }, []);
-
+  }
 
 
     return(
         <SafeAreaView style={styles.container}>
             <Text style={{fontSize: 30, color: '#073B4C', fontWeight: 'bold'}}>Saved Problems</Text>
 
-            <ProblemList problems={problems} />
+            {isLoading ?
+              <ActivityIndicator 
+                size='large'
+                color='#EF476F'
+                style={styles.indicator}
+              /> :
+              
 
+              <ProblemList problems={problems} />
+            }
+            
         </SafeAreaView>
     );
 }
