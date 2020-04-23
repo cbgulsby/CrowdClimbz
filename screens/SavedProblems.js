@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -6,78 +6,109 @@ import {
     SafeAreaView,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator,
 } from 'react-native';
+import ProblemCard from '../components/ProblemCard';
+import firebase from '../firebase';
+import ProblemList from '../components/ProblemList';
 
-
-const sampleData = [
-    {
-        id: '1',
-        problemName: 'I Hate Mondays',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 2,
-    },
-    {
-        id: '2',
-        problemName: 'Going Up',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 0,
-    },
-    {
-        id: '3',
-        problemName: 'Going Down',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 5,
-    },
-    {
-        id: '4',
-        problemName: 'Bottomless Fries',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 3,
-    },
-    {
-        id: '5',
-        problemName: 'All Uphill From Here',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 4,
-    },
-    {
-        id: '6',
-        problemName: 'Angry Monkeys',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 4,
-    },
-    {
-        id: '7',
-        problemName: 'Jeon Jungkook',
-        gymLocation: 'B.bloc Climbing Gangnam',
-        problemLevel: 9,
-    },
-    {
-        id: '8',
-        problemName: 'Seagulls Stop It',
-        gymLocation: 'Dagobah',
-        problemLevel: 2,
-    },
-    {
-        id: '9',
-        problemName: 'Space Mountain',
-        gymLocation: 'Witt Center',
-        problemLevel: 1,
-    },
-]
 
 
 export default function SavedProblems(){
+    
+    const [userSavedProblems, setUserSavedProblems] = useState([]);
+    const [view, setView] = useState(0);
+    
+    const currentUserUID = firebase.auth().currentUser.uid;
+    const dbh = firebase.firestore();
+
+    const [flag1, setFlag1] = useState(1);
+    const [flag2, setFlag2] = useState(0);
+
+    if (flag1){
+
+
+    dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+        if (!querySnapshot.empty){
+            var doc = querySnapshot.docs[0];
+            console.log("DOCUMENT DATA:", doc.data());
+            setUserSavedProblems(doc.data().saved);
+            console.log("Saved Problems: ", userSavedProblems);
+
+        }
+        else {
+            console.log("No such document");
+        }
+        setFlag1(0);
+        setFlag2(1);
+    });
+
+  }
+    const [problems, setProblems] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    
+
+    const ref = firebase.firestore().collection('problems');
+
+  if (flag2) {
+
+    dbh.collection("problems").get().then(function(querySnapshot) {
+      setLoading(true)
+      const tempProblems = [];
+        querySnapshot.forEach(doc => {
+          const{
+            betaVideo,
+            date,
+            description,
+            grade,
+            gym,
+            inappropriateFlag,
+            name,
+            outOfDateFlag,
+            photo,
+            time,
+            user
+          } = doc.data();
+
+          if (userSavedProblems.includes(doc.id))
+          {
+            tempProblems.push({
+              problemInfo: {
+                  gymName: gym,
+                  user: user,
+                  grade: grade,
+                  problemName: name,
+              },
+              key: doc.id
+            })
+          }
+          
+        });
+
+        setProblems(tempProblems);
+        setLoading(false);
+
+      });
+    setFlag2(0);
+  }
+
+
     return(
         <SafeAreaView style={styles.container}>
-            <Text> Saved Problems </Text>
+            <Text style={{fontSize: 30, color: '#073B4C', fontWeight: 'bold'}}>Saved Problems</Text>
 
-            <FlatList
-                data={sampleData}
-                renderItem={({item}) => <Text />} 
-                keyExtractor={item => item.id} 
-            />
+            {isLoading ?
+              <ActivityIndicator 
+                size='large'
+                color='#EF476F'
+                style={styles.indicator}
+              /> :
+              
+
+              <ProblemList problems={problems} />
+            }
+            
         </SafeAreaView>
     );
 }
@@ -85,7 +116,9 @@ export default function SavedProblems(){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 24,
-        backgroundColor: '#4fb9ff',
-        flex: 1
+        backgroundColor: '#118AB2',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

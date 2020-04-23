@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -8,6 +8,7 @@ import {
     Button,
     Picker,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import firebase from '../firebase';
 
@@ -16,36 +17,106 @@ export default function ChangePreferredGym({navigation}){
     
     function send(val) {
         var dbh = firebase.firestore();
+        const currentUserUID = firebase.auth().currentUser.uid;
 
-        dbh.collection('gyms').doc('testgym').update({pref: val});
-        navigation.navigate('Profile');
+        dbh.collection('users').doc(currentUserUID).update({preferredGym: val});
+        //navigation.navigate('Profile');
         Alert.alert("Preferred Gym Updated!");
 
     }
 
-    const [selectedValue, setSelectedValue] = useState("Gym2");
+    const [selectedValue, setSelectedValue] = useState("");
+
+    //I want to build an array of all the gym names we currently have
+    const [markers, setMarkers] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+      
+    useEffect(() => {
+        setLoading(true)
+        return firebase.firestore().collection('SearchGymsCollection').onSnapshot(querySnapshot => {
+            setMarkers([]);
+            let tempMarkers = [];
+          querySnapshot.forEach(doc => {
+            const{
+              gymName,
+              location,
+            } = doc.data();
+
+            tempMarkers.push({
+              
+                title: gymName,
+                key: doc.id
+
+            })
+          });
+          setMarkers(tempMarkers);
+          setLoading(false);
+        });
+    }, []);
+
+
+        // setLoading(true);
+            
+        // //console.log("value: ", value.nativeEvent.text);
+        // firebase.firestore().collection('SearchGymsCollection')
+        // .get()
+        // .then(function(querySnapshot) {
+            
+        //     querySnapshot.forEach(function(doc, i) {
+        //         //let tempMarkers = [];
+        //         console.log(doc.id, " => ", doc.data(), "\n");
+        //         const {
+        //             gymName,
+        //             location
+        //         } = doc.data();
     
+        //         tempMarkers.push({
+        //             title: gymName,
+        //             key: doc.id
+        //         })
+        //     });
+        //     console.log("tempMarkers =>", tempMarkers)
+        //     setMarkers(tempMarkers);
+        //     setLoading(false);
+        // })
+        //  }
+
+
+
+    function pickerList(pickerData) {
+        return( pickerData.map( (x) => { 
+              return( <Picker.Item label={x.title} key={x.key} value={x.title}  />)} ));
+    };
+
     return(
         <SafeAreaView style={styles.container}>
             <View>
-                <Text>Change Preferred Gym</Text>
+                
 
                 <Picker style={{borderColor: 'gray', borderWidth: 2}}
                 prompt='Choose Grade'
                 mode='dropdown'
                 style={{height: 40, width: 350}}
                 selectedValue = {selectedValue}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                >
-                <Picker.Item label="Gym1" value="Gym 1" />
-                <Picker.Item label="Gym2" value="Gym 2" />
-                <Picker.Item label="Gym3" value="Gym 3" />
-                <Picker.Item label="Gym4" value="Gym 4" />
+                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
+                {pickerList(markers)}
                 
                 </Picker>
 
-                <Button  title="Submit Changes" onPress={() => send(selectedValue)} />
-                <Button title="Go Back" onPress={() => navigation.navigate('Profile')} />
+                <View style={{flexDirection: 'row', flex: 0.2}}>
+                    <TouchableOpacity 
+                        style={styles.doubleButton} 
+                        onPress={() => navigation.navigate('Profile')}>
+                        <Text> Cancel </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        style={styles.doubleButton} 
+                        onPress={() => send(selectedValue)}>
+                        <Text> Submit </Text>
+                    </TouchableOpacity>        
+                </View>
+               
             </View>
 
         </SafeAreaView>
@@ -55,7 +126,37 @@ export default function ChangePreferredGym({navigation}){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
-        backgroundColor: '#4fb9ff',
+        backgroundColor: '#118AB2',
         flex: 1
+    },
+    doubleButton: {
+        backgroundColor: '#FFD166',
+        borderColor: '#073B4C',
+        borderWidth: 1,
+        //borderRadius: 12,
+        color: '#073B4C',
+        fontSize: 24,
+        fontWeight: 'bold',
+        overflow: 'hidden',
+        padding: 12,
+        textAlign:'center',
+        width: 200,
+        justifyContent: 'center', 
+        alignItems: 'center',
+    },
+    singleButton: {
+        backgroundColor: '#FFD166',
+        borderColor: '#073B4C',
+        borderWidth: 1,
+        //borderRadius: 12,
+        color: '#073B4C',
+        fontSize: 24,
+        fontWeight: 'bold',
+        overflow: 'hidden',
+        padding: 12,
+        textAlign:'center',
+        justifyContent: 'center', 
+        alignItems: 'center',
     }
+
 });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { 
@@ -8,101 +8,146 @@ import {
     SafeAreaView,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
 import ChangeClimbAbility from '../screens/ChangeClimbAbility';
 import ChangePreferredGym from '../screens/ChangePreferredGym';
 import ChangePassword from '../screens/ChangePassword';
+import firebase from '../firebase';
+import ProblemList from '../components/ProblemList';
 
 const Stack = createStackNavigator();
 
-const sampleData = [
-    {
-        id: '1',
-        problemName: 'I Hate Mondays',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 2,
-    },
-    {
-        id: '2',
-        problemName: 'Going Up',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 0,
-    },
-    {
-        id: '3',
-        problemName: 'Going Down',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 5,
-    },
-    {
-        id: '4',
-        problemName: 'Bottomless Fries',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 3,
-    },
-    {
-        id: '5',
-        problemName: 'All Uphill From Here',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 4,
-    },
-    {
-        id: '6',
-        problemName: 'Angry Monkeys',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 4,
-    },
-]
 
 
 function ProfileScreen({navigation}){
 
+    const [currentUserUsername, setCurrentUser] = useState("");
+    const [currentClimbingAbility, setClimbingAbility] = useState("");
+    const [currentPreferredGym, setPreferredGym] = useState("");
+    //const [sizeProblems, setSizeProblems] = useState(0);
+
     const [view, setView] = useState(0);
+    const [flag1, setFlag1] = useState(1);
+    const [flag2, setFlag2] = useState(0);
+
+    const currentUserUID = firebase.auth().currentUser.uid;
+    
+    const dbh = firebase.firestore();
+
+// if (flag1){
+
+
+//     dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
+//         if (!querySnapshot.empty){
+//             var doc = querySnapshot.docs[0];
+//             console.log("DOCUMENT DATA:", doc.data());
+//             setCurrentUser(doc.data().username);
+//             setClimbingAbility(doc.data().climbingAbility);
+//             setPreferredGym(doc.data().preferredGym);
+//         }
+//         else {
+//             console.log("No such document");
+//         }
+//         setFlag2(1);
+//         setFlag1(0);
+//     });
+// }
+
+
+  useEffect(() => {
+
+    return firebase.firestore().collection('users').where('id', '==', currentUserUID).onSnapshot(querySnapshot => {
+
+        var doc = querySnapshot.docs[0];
+        setCurrentUser(doc.data().username);
+        setClimbingAbility(doc.data().climbingAbility);
+        setPreferredGym(doc.data().preferredGym);
+        setFlag2(1);
+    });
+    
+
+  }, []);
+
+    const [problems, setProblems] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+
+    const ref = firebase.firestore().collection('problems');
+
+if (flag2)
+{
+
+    dbh.collection("problems").where("user", "==", currentUserUsername).get().then(function(querySnapshot) {
+        const tempProblems = [];
+        if (!querySnapshot.empty){
+            var doc = querySnapshot.forEach(doc => {
+                const{
+                  betaVideo,
+                  date,
+                  description,
+                  grade,
+                  gym,
+                  inappropriateFlag,
+                  name,
+                  outOfDateFlag,
+                  photo,
+                  time,
+                  user
+                } = doc.data();
+                
+                tempProblems.push({
+                  problemInfo: {
+                      gymName: gym,
+                      user: user,
+                      grade: grade,
+                      problemName: name,
+                  },
+                  key: doc.id
+                })
+                
+
+              });
+              setProblems(tempProblems);
+              setLoading(false);
+            }
+        });
+    setFlag2(0);
+}
+
 
     return(
         <SafeAreaView style={styles.container}>
+            
             <View style={styles.profileBar}>
-                <View style={{flex: 1, alignContent: 'center'}}>
-                    <Image 
-                        source={require('../assets/blank_profile_pic.png')}
-                        style={styles.profilePic}
-                    />
-                </View>
-                <View style={{flex: 2}}>
                     <View style={styles.description}>
-                        <Text style={{color: 'white'}}>cbgulsby</Text>
-                        <Text style={{color: 'white'}}>Ability: V3</Text>
-                        <Text style={{color: 'white'}}>Preferred Gym: Birmingham Boulders</Text>
+                        <Text style={{color: 'white', textAlign: 'center', fontSize: 26}}> {currentUserUsername} </Text>
+                        <Text style={{color: 'white', textAlign: 'center'}}>Ability: V{currentClimbingAbility}</Text>
+                        <Text style={{color: 'white', textAlign: 'center'}}>Preferred Gym: {currentPreferredGym}</Text>
                     </View>
-                </View>
             </View>
 
-            <View style={{backgroundColor: 'white', flex: 6}}>
+
+
+            <View style={{backgroundColor: '#118AB2', flex: 6}}>
 
                 <View style={{flex: 1, flexDirection: 'row'}}>
                     <TouchableOpacity 
-                        onPress={() => {setView(1)}}
-                        style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'white', fontSize: 25}}>My Problems</Text>
+                        onPress={() => {setView(0)}}
+                        style={styles.button}>
+                            <Text style={{color: '#073B4C', fontSize: 25}}>My Problems</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        onPress={() => {setView(0)}}
-                        style={{flex: 1, backgroundColor: '#eb34d8', borderColor: 'black', borderWidth: 1, margin: 3, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text style={{color: 'white', fontSize: 25}}>Edit Profile</Text>
+                        onPress={() => {setView(1)}}
+                        style={styles.button}>
+                            <Text style={{color: '#073B4C', fontSize: 25}}>Edit Profile</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={{flex: 9}}>
                     {view ? (
-                        <FlatList 
-                            data={sampleData}
-                            renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
-                            keyExtractor={item => item.id} 
-                        />
-                    ) : (
-                        <View style={{flex: 1, backgroundColor: 'white', margin: 3}}>
+                        <View style={{flex: 1, backgroundColor: '#118AB2', margin: 3}}>
                             <TouchableOpacity style={styles.profileEditContainer}
                                 onPress={() => navigation.navigate('Change Climbing Ability')}>
                                 
@@ -117,14 +162,14 @@ function ProfileScreen({navigation}){
                                 onPress={() => navigation.navigate('Change Password')}>
                                 <Text style={styles.profileEditText}>Change Password</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.profileEditContainer}>
-                                <Text style={styles.profileEditText}>Notification Preferences</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.profileEditContainer}>
-                                <Text style={styles.profileEditText}>Apply to be Moderator</Text>
-                            </TouchableOpacity>
+                            
                         </View>
+                    ) : (
+                        
+                    <ProblemList problems={problems} />
+                    
                     )}
+
                 </View>
 
             </View>
@@ -156,7 +201,7 @@ export default function Profile(){
 const styles = StyleSheet.create({
     container: {
         paddingTop: 16,
-        backgroundColor: 'white',
+        backgroundColor: '#118AB2',
         flex: 1
     },
     profilePic: {
@@ -171,35 +216,44 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     description: {
-        backgroundColor: '#2576f7', 
+        backgroundColor: '#073B4C', 
         flex: 1, 
-        margin: 10,
-        padding: 2,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        borderBottomRightRadius: 5,
-        borderBottomLeftRadius: 5,
-        alignContent: 'flex-start',
-        justifyContent: 'flex-start',
+        margin: 5,
+        //padding: 2,
+        borderRadius: 5,
+        alignContent: 'center',
+        justifyContent: 'center',
         borderColor: 'black',
         borderWidth: 1,
     },
     profileBar: {
-        backgroundColor: 'white', 
+        backgroundColor: '#118AB2', 
         flex: 1, 
         flexDirection: 'row'
     },
     profileEditContainer: {
         flex: 1, 
-        backgroundColor: '#2576f7', 
+        backgroundColor: '#FFD166', 
         justifyContent: 'center', 
         alignItems: 'center', 
         borderColor: 'black', 
         borderWidth: 1, 
-        margin: 3
+        margin: 3,
+        borderRadius: 5
     },
     profileEditText: {
         fontSize: 30, 
-        color: 'white'
+        color: '#073B4C'
+    },
+    button: {
+        flex: 1, 
+        backgroundColor: '#EF476F', 
+        borderColor: 'black', 
+        borderWidth: 1, 
+        margin: 3, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        borderRadius: 5
     }
+
 });
