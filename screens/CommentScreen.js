@@ -113,6 +113,8 @@ export default function CommentScreen({route, navigation}) {
         <View style = {styles.container}>
             <BackIcon
                 name = 'ios-arrow-back'
+                size = {50}
+                style = {styles.backButton}
                 onPress = {
                     () => navigation.goBack()
                 }
@@ -144,6 +146,7 @@ export default function CommentScreen({route, navigation}) {
             <TextInput
                 autoCapitalize = 'none'
                 placeholder = 'Comment'
+                style = {styles.textInput}
                 onChangeText = {
                     (commentText) => setCommentText(commentText)
                 }
@@ -151,6 +154,8 @@ export default function CommentScreen({route, navigation}) {
             />
             <Button
                 title = "Post Comment"
+                type = "clear"
+                color = "#118AB2"
                 onPress = {
                     () => postComment(commentText, problemRef)
                 }
@@ -161,21 +166,21 @@ export default function CommentScreen({route, navigation}) {
 
 const styles = StyleSheet.create({
     container: {
+        paddingTop: 24,
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
+        backgroundColor: '#118AB2',
+        //alignItems: 'center',
         justifyContent: 'center'
     },
     textInput: {
         height: 40,
         width: '90%',
-        borderColor: 'gray',
+        borderColor: 'white',
+        alignSelf: 'center',
         borderWidth: 1,
         marginTop: 8
     },
-    image: {
-        width: '100%',
-        height: 300,
-        resizeMode: 'contain'
+    backButton: {
+        paddingLeft: 15
     }
 })
