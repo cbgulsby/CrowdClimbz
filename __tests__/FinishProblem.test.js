@@ -11,5 +11,5 @@ test('Entered too long of problem name', () => {
 });
 
 test('Did not add gym name to problem', () => {
-	expect(checkGym("")).toBe(1);
+	expect(checkGym("noneSelected")).toBe(1);
 });
