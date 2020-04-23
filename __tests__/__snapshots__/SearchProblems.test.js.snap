@@ -4,7 +4,7 @@ exports[`renders correctly 1`] = `
 <View
   style={
     Object {
-      "backgroundColor": "#4fb9ff",
+      "backgroundColor": "#118AB2",
       "flex": 1,
       "flexDirection": "column",
       "paddingTop": 24,
@@ -18,14 +18,69 @@ exports[`renders correctly 1`] = `
     rejectResponderTermination={true}
     style={
       Object {
+        "alignSelf": "center",
+        "backgroundColor": "white",
         "borderColor": "gray",
         "borderWidth": 1,
         "height": 40,
+        "marginBottom": 10,
+        "marginTop": 5,
         "paddingLeft": 5,
+        "width": "97.5%",
       }
     }
     underlineColorAndroid="transparent"
   />
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "backgroundColor": "white",
+        "height": 25,
+        "marginBottom": 5,
+        "width": "97%",
+      }
+    }
+  >
+    <RCTPicker
+      items={
+        Array [
+          Object {
+            "label": "Newest to Oldest",
+            "textColor": undefined,
+            "value": "ascendingDate",
+          },
+          Object {
+            "label": "Oldest to Newest",
+            "textColor": undefined,
+            "value": "descendingDate",
+          },
+          Object {
+            "label": "Problem Name A to Z",
+            "textColor": undefined,
+            "value": "ascendingName",
+          },
+          Object {
+            "label": "Problem Name Z to A",
+            "textColor": undefined,
+            "value": "descendingName",
+          },
+        ]
+      }
+      onChange={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      selectedIndex={0}
+      style={
+        Array [
+          Object {
+            "height": 216,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
   <RCTScrollView
     data={Array []}
     disableVirtualization={false}
@@ -47,11 +102,6 @@ exports[`renders correctly 1`] = `
     renderItem={[Function]}
     scrollEventThrottle={50}
     stickyHeaderIndices={Array []}
-    style={
-      Object {
-        "flex": 2,
-      }
-    }
     updateCellsBatchingPeriod={50}
     viewabilityConfigCallbackPairs={Array []}
     windowSize={21}
