@@ -103,10 +103,11 @@ export default function CommentScreen({route, navigation}) {
                     })
                 })
                 setComments(tempComments);
-                setCommentStatus(true)
-                setLoading(false)
+                setCommentStatus(true);
+                setLoading(false);
             })
         }
+        setLoading(false)
     }, [])
     
     return (
@@ -139,7 +140,6 @@ export default function CommentScreen({route, navigation}) {
                 </>
                 :
                 <>
-                    <Text>No Comments</Text>
                 </>
             }
 

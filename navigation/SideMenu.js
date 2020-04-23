@@ -10,6 +10,7 @@ import SearchGyms from '../screens/SearchGyms';
 import SearchProblems from '../screens/SearchProblems';
 import ProblemCardScreen from '../screens/ProblemCardScreen';
 import CommentScreen from '../screens/CommentScreen';
+import VideoScreen from '../screens/VideoScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -27,6 +28,7 @@ export default function SideMenu() {
           <Stack.Screen name = "Home" component = {Home}/>
           <Stack.Screen name = "ProblemCardScreen" component = {ProblemCardScreen}/>
           <Stack.Screen name = "CommentScreen" component = {CommentScreen}/>
+          <Stack.Screen name = "VideoScreen" component = {VideoScreen}/>
         </Stack.Navigator>
       )}
       </Drawer.Screen>

@@ -37,13 +37,30 @@ export default function ProblemCardScreen({route, navigation}) {
 
     var storage = firebase.storage();
     var imageRef = storage.ref('problemPhotos').child(user).child(problemName);
-    
+    var videoRef;
+
     useEffect(() => {
         async function loadScreen() {
             setLoading(true)
             await imageRef.getDownloadURL().then(data => {
                 setImageUri(data)
             })
+            var isVideo = (await firebase.firestore().collection('problems').doc(documentId).get()).get('betaVideo');
+            console.log(isVideo.toString());
+            if (isVideo == 0) {
+                // No video
+                setVideoStatus(false)
+            }
+            else {
+                // There is a video
+                videoRef = storage.ref('problemVideos').child(user).child(problemName);
+                // videoRef = storage.ref('problemVideos').child('laura').child('Cool Rocks');
+                await videoRef.getDownloadURL().then(data => {
+                    setVideoUri(data)
+                })
+                setVideoStatus(true)
+                setLoading(false)
+            }
             setLoading(false)
         }
         loadScreen()
@@ -131,6 +148,22 @@ export default function ProblemCardScreen({route, navigation}) {
                         
                         <Text style = {styles.descriptionText}>{user}: {description}</Text>
                         <Text style = {styles.dateTimeText}>Uploaded: {date} at {time}</Text>
+                        {videoExists ?
+                            <>
+                                <SaveIcon
+                                    name = 'videocamera'
+                                    size = {50}
+                                    style = {styles.videoButton}
+                                    onPress = {
+                                        () => navigation.navigate("VideoScreen", {
+                                            videoUri: videoUri
+                                        })
+                                    }
+                                />
+                            </>
+                            :
+                            <></>
+                        }
                     </View>
                     
                 </>                
@@ -212,5 +245,8 @@ const styles = StyleSheet.create({
         color: '#073B4C',
         fontWeight: 'bold',
         paddingLeft: 10
+    },
+    videoButton: {
+        paddingLeft: (Dimensions.get('window').width / 2) - 20
     }
 })
