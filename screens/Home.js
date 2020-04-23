@@ -54,6 +54,16 @@ export default function Home({navigation}) {
           key: doc.id
       })
       });
+
+      tempProblems.sort(function (a, b) {
+        if (a.problemInfo.date >= b.problemInfo.date) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
+      })
+
       setProblems(tempProblems);
       setLoading(false);
     });
