@@ -15,7 +15,7 @@ import ProblemList from '../components/ProblemList';
 
 
 
-export default function SavedProblems(){
+export default function SavedProblems({navigation}){
     
     const [userSavedProblems, setUserSavedProblems] = useState([]);
     const [view, setView] = useState(0);
@@ -65,6 +65,7 @@ export default function SavedProblems(){
             gym,
             inappropriateFlag,
             name,
+            numComments,
             outOfDateFlag,
             photo,
             time,
@@ -75,12 +76,21 @@ export default function SavedProblems(){
           {
             tempProblems.push({
               problemInfo: {
-                  gymName: gym,
-                  user: user,
-                  grade: grade,
-                  problemName: name,
-              },
-              key: doc.id
+                betaVideo: betaVideo,
+                cardNavigation: navigation,
+                date: date,
+                description: description,
+                grade: grade,
+                gymName: gym,
+                inappropriateFlag: inappropriateFlag,
+                numComments: numComments,
+                outOfDateFlag: outOfDateFlag,
+                problemName: name,
+                photo: photo,
+                time: time,
+                user: user,
+            },
+            key: doc.id
             })
           }
           
