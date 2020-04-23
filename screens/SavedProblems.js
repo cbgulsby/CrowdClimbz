@@ -23,6 +23,12 @@ export default function SavedProblems(){
     const currentUserUID = firebase.auth().currentUser.uid;
     const dbh = firebase.firestore();
 
+    const [flag1, setFlag1] = useState(1);
+    const [flag2, setFlag2] = useState(0);
+
+    if (flag1){
+
+
     dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
         if (!querySnapshot.empty){
             var doc = querySnapshot.docs[0];
@@ -34,16 +40,18 @@ export default function SavedProblems(){
         else {
             console.log("No such document");
         }
-        setFlag(1);
+        setFlag1(0);
+        setFlag2(1);
     });
 
+  }
     const [problems, setProblems] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const [flag, setFlag] = useState(0);
+    
 
     const ref = firebase.firestore().collection('problems');
 
-  if (flag) {
+  if (flag2) {
 
     dbh.collection("problems").get().then(function(querySnapshot) {
       setLoading(true)
@@ -82,6 +90,7 @@ export default function SavedProblems(){
         setLoading(false);
 
       });
+    setFlag2(0);
   }
 
 

@@ -30,11 +30,15 @@ function ProfileScreen({navigation}){
     //const [sizeProblems, setSizeProblems] = useState(0);
 
     const [view, setView] = useState(0);
-    const [flag, setFlag] = useState(0);
+    const [flag1, setFlag1] = useState(1);
+    const [flag2, setFlag2] = useState(0);
 
     const currentUserUID = firebase.auth().currentUser.uid;
     
     const dbh = firebase.firestore();
+
+if (flag1){
+
 
     dbh.collection("users").where("id", "==", currentUserUID).get().then(function(querySnapshot) {
         if (!querySnapshot.empty){
@@ -47,16 +51,17 @@ function ProfileScreen({navigation}){
         else {
             console.log("No such document");
         }
-        setFlag(1);
+        setFlag2(1);
+        setFlag1(0);
     });
-
+}
 
     const [problems, setProblems] = useState([]);
     const [isLoading, setLoading] = useState(false);
 
     const ref = firebase.firestore().collection('problems');
 
-if (flag)
+if (flag2)
 {
 
     dbh.collection("problems").where("user", "==", currentUserUsername).get().then(function(querySnapshot) {
@@ -93,6 +98,7 @@ if (flag)
               setLoading(false);
             }
         });
+    setFlag2(0);
 }
 
 
