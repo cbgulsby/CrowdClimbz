@@ -17,7 +17,7 @@ import 'firebase/storage';
 
 console.disableYellowBox = true;
 
-export default function SearchProblem(){
+export default function SearchProblem({navigation}){
     
     const [text, setText] = useState('Enter Gym Name');
     const [problems, setProblems] = useState([])
@@ -37,7 +37,7 @@ export default function SearchProblem(){
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc, i) {
                 console.log(doc.id, "=> ", doc.data(), "\n");
-                const {
+                const{
                     betaVideo,
                     date,
                     description,
@@ -45,19 +45,28 @@ export default function SearchProblem(){
                     gym,
                     inappropriateFlag,
                     name,
+                    numComments,
                     outOfDateFlag,
                     photo,
                     time,
                     user
-                } = doc.data();
-
-                tempProblems.push({
+                  } = doc.data();
+          
+                  tempProblems.push({
                     problemInfo: {
-                        gymName: gym,
-                        user: user,
-                        grade: grade,
-                        problemName: name,
+                        betaVideo: betaVideo,
+                        cardNavigation: navigation,
                         date: date,
+                        description: description,
+                        grade: grade,
+                        gymName: gym,
+                        inappropriateFlag: inappropriateFlag,
+                        numComments: numComments,
+                        outOfDateFlag: outOfDateFlag,
+                        problemName: name,
+                        photo: photo,
+                        time: time,
+                        user: user,
                     },
                     key: doc.id
                 })
