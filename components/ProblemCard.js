@@ -1,19 +1,46 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width - 10;
 
 export default function ProblemCard(props) {
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress = {() => {
+            props.problemInfo.cardNavigation.navigate("ProblemCardScreen", {
+                betaVideo: props.problemInfo.betaVideo,
+                cardNavigation: props.problemInfo.cardNavigation,
+                date: props.problemInfo.date,
+                description: props.problemInfo.description,
+                documentId: props.id,
+                grade: props.problemInfo.grade,
+                gymName: props.problemInfo.gymName,
+                inappropriateFlag: props.problemInfo.inappropriateFlag,
+                numComments: props.problemInfo.numComments,
+                outOfDateFlag: props.problemInfo.outOfDateFlag,
+                problemName: props.problemInfo.problemName,
+                photo: props.problemInfo.photo,
+                time: props.problemInfo.time,
+                user: props.problemInfo.user,
+            })}}>
             <View style={styles.leftInnerContainer}>
                 <View style={styles.gymNameContainer}>
-                    <Text style={{fontSize: 30, color: 'white'}}>{props.problemName}</Text>
+                    <Text 
+                        style={{fontSize: 30, color: '#073B4C'}}>
+                        {props.problemInfo.problemName}
+                    </Text>
                 </View>
                 <View style={styles.gymLocationContainer}>
-                    <Text style={{fontSize: 15, color: 'white'}}>{props.gymLocation}</Text>
+                    <Text 
+                        style={{fontSize: 15, color: '#073B4C'}}>
+                        {props.problemInfo.gymName}
+                    </Text>
                 </View>
             </View>
             <View style={styles.rightInnerContainer}>
-                <Text style={{fontSize: 40, color: 'white'}}>V{props.problemLevel}</Text>
+                <Text 
+                    style={{fontSize: 40, color: '#073B4C'}}>
+                    V{props.problemInfo.grade}
+                </Text>
             </View>
         </TouchableOpacity>
     );
@@ -22,11 +49,14 @@ export default function ProblemCard(props) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row', 
-        backgroundColor: '#2576f7', 
-        borderWidth: 1, 
+        backgroundColor: '#06D6A0', 
+        borderWidth: 2, 
         borderColor: 'black', 
         margin: 3, 
-        height: 100
+        height: 100,
+        width: screenWidth,
+        alignSelf: 'center',
+        borderRadius: 5
     },
     leftInnerContainer: {
         flex: 3
