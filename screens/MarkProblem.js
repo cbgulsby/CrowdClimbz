@@ -13,7 +13,7 @@ import {
   Camera,
   Dimensions
 } from 'react-native';
-import '@expo/browser-polyfill';
+//import '@expo/browser-polyfill';
 import {captureRef as takeSnapshotAsync} from 'react-native-view-shot';
 
 
@@ -62,8 +62,7 @@ export default class MarkProblem extends Component {
          resizeMode: 'contain'
        }} 
         source={{uri: oldUri}} 
-        resizeMode='contain'
-      >
+        >
         <ExpoPixi.Sketch
           ref={ref => (this.sketch = ref)}
           style={styles.sketch}
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
   },
   sketch: {
     width: Dimensions.get('window').width,
-    height: 500
+    height: 500,
   },
    buttonStyle: {
         backgroundColor: '#06D6A0',
