@@ -102,6 +102,20 @@ export default function CommentScreen({route, navigation}) {
                         key: doc.id
                     })
                 })
+
+                tempComments.sort(function (a, b) {
+                    if (a.commentInfo.date > b.commentInfo.date) {
+                        return 1;
+                    }
+                    else if (a.commentInfo.date == b.commentInfo.date) {
+                        if (a.commentInfo.time > b.commentInfo.time) {
+                            return 1;
+                        }
+                    }
+                    else {
+                        return -1;
+                    }
+                })
                 setComments(tempComments);
                 setCommentStatus(true);
                 setLoading(false);
