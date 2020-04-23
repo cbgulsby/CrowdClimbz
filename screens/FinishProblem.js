@@ -117,7 +117,7 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
-    	uploadImage(data.uri, currentUserUsername, problemName)
+    	uploadImage(data, currentUserUsername, problemName)
     		.then(() => {
     			console.log('Image uploaded successfully');
     		})
@@ -159,7 +159,7 @@ export default function FinishProblem( {navigation, route}){
 			<View style={{flexDirection:'row', paddingBottom: 20, marginLeft: 10}}>
          	 	<Image 
          	 		style={{height:150, width:150}}
-         	 		source={{ uri: data.uri }} 
+         	 		source={{ uri: data }} 
          	 	/>
 				<TextInput
 	         	 	style={{height: 150, width: 225, borderColor: 'gray', borderWidth: 2}}
@@ -211,7 +211,7 @@ export default function FinishProblem( {navigation, route}){
 	  			{pickerList(gymChoices)}
 	  			</Picker>
 	        	<Button
-	        		title = "If you can't find the right gym, add a new gym here!"
+	        		title = "Can't find your gym? Add a new gym!"
 	        		style={{marginBottom: 20}}
 	        		onPress={() => navigation.navigate('Add Gym')}
 	        	/>
