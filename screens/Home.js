@@ -28,6 +28,7 @@ export default function Home({navigation}) {
           gym,
           inappropriateFlag,
           name,
+          numComments,
           outOfDateFlag,
           photo,
           time,
@@ -36,14 +37,33 @@ export default function Home({navigation}) {
 
         tempProblems.push({
           problemInfo: {
-              gymName: gym,
-              user: user,
+              betaVideo: betaVideo,
+              cardNavigation: navigation,
+              date: date,
+              description: description,
               grade: grade,
+              gymName: gym,
+              inappropriateFlag: inappropriateFlag,
+              numComments: numComments,
+              outOfDateFlag: outOfDateFlag,
               problemName: name,
+              photo: photo,
+              time: time,
+              user: user,
           },
           key: doc.id
       })
       });
+
+      tempProblems.sort(function (a, b) {
+        if (a.problemInfo.date >= b.problemInfo.date) {
+          return 1;
+        }
+        else {
+          return -1;
+        }
+      })
+
       setProblems(tempProblems);
       setLoading(false);
     });

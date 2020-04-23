@@ -7,7 +7,8 @@ import {
     Button,
     Alert,
     FlatList,
-    ActivityIndicator
+    ActivityIndicator,
+    Picker
 } from 'react-native';
 import ProblemList from '../components/ProblemList';
 import firebase from '../firebase';
@@ -21,6 +22,7 @@ export default function SearchProblem(){
     const [text, setText] = useState('Enter Gym Name');
     const [problems, setProblems] = useState([])
     const [isLoading, setLoading] = useState(false);
+    const [selectedValue, setSelectedValue] = useState("date");
 
     var storage = firebase.storage();
 
@@ -55,6 +57,7 @@ export default function SearchProblem(){
                         user: user,
                         grade: grade,
                         problemName: name,
+                        date: date,
                     },
                     key: doc.id
                 })
@@ -65,6 +68,78 @@ export default function SearchProblem(){
         })
     }
 
+    function sortProblems(sortValue) {
+        setSelectedValue(sortValue)
+        if(sortValue == 'ascendingName') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.problemName > b.problemInfo.problemName) {
+                    return 1;
+                }
+                if (a.problemInfo.problemName < b.problemInfo.problemName) {
+                    return -1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+        else if(sortValue == 'descendingName') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.problemName > b.problemInfo.problemName) {
+                    return -1;
+                }
+                if (a.problemInfo.problemName < b.problemInfo.problemName) {
+                    return 1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+        else if(sortValue == 'ascendingDate') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.date > b.problemInfo.date) {
+                    return -1;
+                }
+                if (a.problemInfo.date < b.problemInfo.date) {
+                    return 1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+        else if(sortValue == 'descendingDate') {
+            let temp = problems;
+
+            console.log(temp)
+
+            temp.sort(function (a, b) {
+                console.log("a => ", a)
+                if (a.problemInfo.date > b.problemInfo.date) {
+                    return 1;
+                }
+                if (a.problemInfo.date < b.problemInfo.date) {
+                    return -1;
+                }
+                return 0
+            })
+            setProblems(temp)
+        }
+    }
+
     return(
         <View style={styles.container}>
             <TextInput
@@ -72,6 +147,16 @@ export default function SearchProblem(){
                 onSubmitEditing={(text) => queryProblems(text)}
                 placeholder="Enter Gym Name"
             />
+            <Picker 
+                style={{backgroundColor: 'white', height: 25, width: '97%', marginBottom: 5, alignSelf: 'center'}}
+                selectedValue={selectedValue}
+                onValueChange={(itemValue) => sortProblems(itemValue)}
+            >
+                <Picker.Item label="Newest to Oldest" value="ascendingDate" />
+                <Picker.Item label="Oldest to Newest" value="descendingDate" />
+                <Picker.Item label="Problem Name A to Z" value="ascendingName" />
+                <Picker.Item label="Problem Name Z to A" value="descendingName" />
+            </Picker>
             {isLoading ? 
                 <ActivityIndicator 
                     size='large'

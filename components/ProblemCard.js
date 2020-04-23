@@ -3,9 +3,25 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-nati
 
 const screenWidth = Dimensions.get('window').width - 10;
 
-export default function TempProblemCard(props) {
+export default function ProblemCard(props) {
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress = {() => {
+            props.problemInfo.cardNavigation.navigate("ProblemCardScreen", {
+                betaVideo: props.problemInfo.betaVideo,
+                cardNavigation: props.problemInfo.cardNavigation,
+                date: props.problemInfo.date,
+                description: props.problemInfo.description,
+                documentId: props.id,
+                grade: props.problemInfo.grade,
+                gymName: props.problemInfo.gymName,
+                inappropriateFlag: props.problemInfo.inappropriateFlag,
+                numComments: props.problemInfo.numComments,
+                outOfDateFlag: props.problemInfo.outOfDateFlag,
+                problemName: props.problemInfo.problemName,
+                photo: props.problemInfo.photo,
+                time: props.problemInfo.time,
+                user: props.problemInfo.user,
+            })}}>
             <View style={styles.leftInnerContainer}>
                 <View style={styles.gymNameContainer}>
                     <Text 

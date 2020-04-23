@@ -36,6 +36,24 @@ exports[`renders correctly 1`] = `
     allowFontScaling={true}
     autoCapitalize="none"
     onChangeText={[Function]}
+    placeholder="Username"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderColor": "gray",
+        "borderWidth": 1,
+        "height": 40,
+        "marginTop": 8,
+        "width": "90%",
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <TextInput
+    allowFontScaling={true}
+    autoCapitalize="none"
+    onChangeText={[Function]}
     placeholder="Password"
     rejectResponderTermination={true}
     secureTextEntry={true}
