@@ -19,11 +19,8 @@ async function postComment(commentText, problemRef) {
         return;
     }
     var uid = firebase.auth().currentUser.uid;
-    console.log(uid.toString());
     var username = (await firebase.firestore().collection('users').doc(uid).get()).get('username');
     var currentCommentNum = (await problemRef.get()).get('numComments');
-    console.log(currentCommentNum);
-    console.log(username.toString());
     try {
         await problemRef.collection('comments').add({
             username: username,

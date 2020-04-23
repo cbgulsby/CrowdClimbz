@@ -15,10 +15,8 @@ import firebase from '../firebase';
 
 async function savePost(documentId) {
     var uid = firebase.auth().currentUser.uid;
-    console.log(uid.toString());
     try {
         var userSnapShot = await firebase.firestore().collection('users').doc(uid).get();
-        console.log(userSnapShot.data());
         var saved = await userSnapShot.get('saved');
         if (saved == null) {
             var tempArray = [documentId];
@@ -42,7 +40,6 @@ async function unsavePost(documentId) {
     var uid = firebase.auth().currentUser.uid;
     try {
         var userSnapShot = await firebase.firestore().collection('users').doc(uid).get();
-        console.log(userSnapShot.data());
         var saved = await userSnapShot.get('saved');
         if (saved == null) {
             console.log("Cannot remove from empty array");
@@ -89,17 +86,28 @@ export default function ProblemCardScreen({route, navigation}) {
     useEffect(() => {
         async function loadScreen() {
             setLoading(true)
+            
+            var uid = firebase.auth().currentUser.uid;
+            var userSnapShot = await firebase.firestore().collection('users').doc(uid).get();
+            var savedArray = await userSnapShot.get('saved');
+            if (savedArray == null) {
+                setSaveStatus(false)
+            }
+            else if (savedArray.includes(documentId)) {
+                setSaveStatus(true)
+            }
+            else {
+                setSaveStatus(false)
+            }
+
             await imageRef.getDownloadURL().then(data => {
                 setImageUri(data)
             })
             var isVideo = (await firebase.firestore().collection('problems').doc(documentId).get()).get('betaVideo');
-            //console.log(isVideo.toString());
             if (isVideo == 0) {
-                // No video
                 setVideoStatus(false)
             }
             else {
-                // There is a video
                 videoRef = storage.ref('problemVideos').child(user).child(problemName);
                 // videoRef = storage.ref('problemVideos').child('laura').child('Cool Rocks');
                 await videoRef.getDownloadURL().then(data => {
@@ -236,8 +244,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#06D6A0',
         paddingTop: 24
-        //alignItems: 'center',
-        // justifyContent: 'center'
     },
 
     topContainer: {
@@ -250,12 +256,10 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     image: {
-        // width: '100%',
-        // height: 300,
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').width,
-        // resizeMode: 'contain',
-        resizeMode: 'cover',
+        resizeMode: 'contain',
+        // resizeMode: 'cover',
     },
     descriptionText: {
         fontSize: 16,

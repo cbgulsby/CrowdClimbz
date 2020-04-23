@@ -5,7 +5,6 @@ import {
     View,
     Dimensions,
 } from 'react-native';
-//import Video from 'react-native-video';
 import {Video} from 'expo-av';
 import BackIcon from 'react-native-vector-icons/Ionicons';
 
@@ -22,16 +21,6 @@ export default function VideoScreen({route, navigation}) {
                     () => navigation.goBack()
                 }
             />
-            {/* <Text>{videoUri.toString()}</Text> */}
-            {/* <Video
-                source = {{videoUri}}
-                ref = {(ref) => {
-                    this.player = ref
-                }}
-                onBuffer = {this.onBuffer}
-                onError = {this.videoError}
-                style = {styles.backgroundVideo}
-            /> */}
             <Video
                 source = {{uri: videoUri}}
                 rate={1.0}
@@ -41,7 +30,6 @@ export default function VideoScreen({route, navigation}) {
                 shouldPlay
                 isLooping
                 style={{ 
-                    // width: 300,
                     width: Dimensions.get('window').width, 
                     height: Dimensions.get('window').width + 200
                 }}
