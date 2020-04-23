@@ -14,7 +14,6 @@ import * as ImagePicker from 'expo-image-picker';
 import CapturePhoto from '../screens/CapturePhoto';
 import FinishProblem from '../screens/FinishProblem';
 import PreviewPhoto from '../screens/PreviewPhoto';
-import Home from '../screens/Home';
 import MarkProblem from '../screens/MarkProblem';
 import AddGym from '../screens/AddGym';
 
@@ -81,7 +80,6 @@ function MyNavigator() {
         <Stack.Screen name="Take Photo" component={CapturePhoto} />
         <Stack.Screen name="Preview Photo" component={PreviewPhoto} />
         <Stack.Screen name="Mark Problem" component={MarkProblem} />
-        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Add Gym" component={AddGym} />
       </Stack.Navigator>
   );

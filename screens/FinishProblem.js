@@ -11,6 +11,7 @@ import {
   Alert,
   TouchableOpacity
 } from 'react-native';
+import {NavigationActions} from 'react-navigation';
 import firebase from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
 console.disableYellowBox = true; 
@@ -152,7 +153,7 @@ export default function FinishProblem( {navigation, route}){
 	.catch(function(error) {
 	    console.error("Error writing document: ", error);
 	});
-	navigation.navigate('Home');
+	navigation.navigate('Start New Problem');
 	}
 	
 	return(
