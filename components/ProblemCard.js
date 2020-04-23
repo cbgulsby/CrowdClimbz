@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-nati
 
 const screenWidth = Dimensions.get('window').width - 10;
 
-export default function TempProblemCard(props) {
+export default function ProblemCard(props) {
     return (
         <TouchableOpacity style={styles.container}>
             <View style={styles.leftInnerContainer}>

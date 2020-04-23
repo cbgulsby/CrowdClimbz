@@ -8,7 +8,6 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native';
-import ProblemCard from '../components/ProblemCard';
 
 
 const sampleData = [
@@ -76,7 +75,7 @@ export default function SavedProblems(){
 
             <FlatList
                 data={sampleData}
-                renderItem={({item}) => <ProblemCard id={item.id} problemName={item.problemName} gymLocation={item.gymLocation} problemLevel={item.problemLevel} />} 
+                renderItem={({item}) => <Text />} 
                 keyExtractor={item => item.id} 
             />
         </SafeAreaView>
