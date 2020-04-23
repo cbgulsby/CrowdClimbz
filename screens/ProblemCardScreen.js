@@ -13,6 +13,53 @@ import BackIcon from 'react-native-vector-icons/Ionicons';
 
 import firebase from '../firebase';
 
+async function savePost(documentId) {
+    var uid = firebase.auth().currentUser.uid;
+    console.log(uid.toString());
+    try {
+        var userSnapShot = await firebase.firestore().collection('users').doc(uid).get();
+        console.log(userSnapShot.data());
+        var saved = await userSnapShot.get('saved');
+        if (saved == null) {
+            var tempArray = [documentId];
+            await firebase.firestore().collection('users').doc(uid).update({
+                saved: tempArray
+            })
+        }
+        else {
+            await firebase.firestore().collection('users').doc(uid).update({
+                saved: firebase.firestore.FieldValue.arrayUnion(documentId) 
+            })
+        }
+        console.log("Successfully saved post")
+    }
+    catch (error) {
+        console.log(error.toString());
+    }
+}
+
+async function unsavePost(documentId) {
+    var uid = firebase.auth().currentUser.uid;
+    try {
+        var userSnapShot = await firebase.firestore().collection('users').doc(uid).get();
+        console.log(userSnapShot.data());
+        var saved = await userSnapShot.get('saved');
+        if (saved == null) {
+            console.log("Cannot remove from empty array");
+            return;
+        }
+        else {
+            await firebase.firestore().collection('users').doc(uid).update({
+                saved: firebase.firestore.FieldValue.arrayRemove(documentId)
+            })
+        }
+        console.log("Successfully unsaved post");
+    }
+    catch (error) {
+        console.log(error.toString());
+    }
+}
+
 export default function ProblemCardScreen({route, navigation}) {
     const [isLoading, setLoading] = useState(false);
     const [imageUri, setImageUri] = useState('');
@@ -46,7 +93,7 @@ export default function ProblemCardScreen({route, navigation}) {
                 setImageUri(data)
             })
             var isVideo = (await firebase.firestore().collection('problems').doc(documentId).get()).get('betaVideo');
-            console.log(isVideo.toString());
+            //console.log(isVideo.toString());
             if (isVideo == 0) {
                 // No video
                 setVideoStatus(false)
@@ -110,6 +157,12 @@ export default function ProblemCardScreen({route, navigation}) {
                                         name = 'star'
                                         size = {40}
                                         style = {styles.saveButton}
+                                        onPress = {
+                                            () => {
+                                                setSaveStatus(false)
+                                                unsavePost(documentId)
+                                            }
+                                        }
                                     />
                                 </>
                                 :
@@ -118,6 +171,12 @@ export default function ProblemCardScreen({route, navigation}) {
                                         name = 'staro'
                                         size = {40}
                                         style = {styles.saveButton}
+                                        onPress = {
+                                            () => {
+                                                setSaveStatus(true)
+                                                savePost(documentId)
+                                            }
+                                        }
                                     />
                                 </>
                             }
