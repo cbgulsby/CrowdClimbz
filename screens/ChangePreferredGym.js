@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     StyleSheet, 
     View, 
@@ -8,6 +8,7 @@ import {
     Button,
     Picker,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import firebase from '../firebase';
 
@@ -28,14 +29,15 @@ export default function ChangePreferredGym({navigation}){
 
     //I want to build an array of all the gym names we currently have
     const [markers, setMarkers] = useState([]);
+    const [isLoading, setLoading] = useState(false);
         
-    function getData() {
-        setMarkers([]);
-        let tempMarkers = [];
         //console.log("value: ", value.nativeEvent.text);
         firebase.firestore().collection('SearchGymsCollection')
         .get()
         .then(function(querySnapshot) {
+            setLoading(true);
+            setMarkers([]);
+            let tempMarkers = [];
             querySnapshot.forEach(function(doc, i) {
                 //let tempMarkers = [];
                 console.log(doc.id, " => ", doc.data(), "\n");
@@ -51,13 +53,35 @@ export default function ChangePreferredGym({navigation}){
             });
             console.log("tempMarkers =>", tempMarkers)
             setMarkers(tempMarkers);
-        
+            setLoading(false);
         })
-        console.log("markers =>", markers);
-        return tempMarkers;
-    }
-    
         
+    
+  //   const ref = firebase.firestore().collection('SearchGymsCollection');
+
+  //   useEffect(() => {
+  //       //setLoading(true)
+  //       return ref.onSnapshot(querySnapshot => {
+  //         const tempMarkers = [];
+  //         querySnapshot.forEach(doc => {
+  //           const{
+  //             gymName,
+  //             location
+  //           } = doc.data();
+
+  //           tempMarkers.push({
+  //             problemInfo: {
+  //                 title: gymName
+  //             },
+  //             key: doc.id
+  //         })
+  //         });
+  //         setMarkers(tempMarkers);
+  //         //setLoading(false);
+  //       });
+  // }, []);   
+
+
     function pickerList(pickerData) {
         return( pickerData.map( (x) => { 
               return( <Picker.Item label={x.title} key={x.key} value={x.title}  />)} ));
@@ -67,12 +91,6 @@ export default function ChangePreferredGym({navigation}){
         <SafeAreaView style={styles.container}>
             <View>
                 
-                <TouchableOpacity 
-                    style={styles.singleButton} 
-                    onPress={() => getData()}>
-                    <Text> Load Gyms </Text>
-                </TouchableOpacity> 
-
                 <Picker style={{borderColor: 'gray', borderWidth: 2}}
                 prompt='Choose Grade'
                 mode='dropdown'
@@ -96,7 +114,6 @@ export default function ChangePreferredGym({navigation}){
                         <Text> Submit </Text>
                     </TouchableOpacity>        
                 </View>
-                
                
             </View>
 
