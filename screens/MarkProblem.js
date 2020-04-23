@@ -18,6 +18,7 @@ import {captureRef as takeSnapshotAsync} from 'react-native-view-shot';
 
 export default class MarkProblem extends Component {
   state = {
+    oldImage: this.props.route.params.data.uri,
     image: this.props.route.params.data.uri,
     strokeColor: 0x06D6A0,
     strokeWidth: 10
@@ -33,56 +34,29 @@ export default class MarkProblem extends Component {
 
   onChangeAsync = async ({ width, height }) => {
     const options = {
-      format: 'jpg',
+      format: 'png',
       quality: 0.9,
       height,
       width,
     };
-    const ref = useRef();
+    //const ref = useRef();
     const uri = await takeSnapshotAsync(this.sketch, options);
     this.setState({
       image: uri
     });
-    console.log("Image: ", this.state.image);
+    //console.log("Image: ", this.state.image);
   };
-
-  onReady = () => {
-    console.log('ready!');
-    console.log("STATE: ", this.state.image);
-    var myUri = this.state.image;
-    //var img = new HTMLImageElement(myUri);
-    //we create a PIXI.Texture using the img
-    var tex = PIXI.Texture.from(myUri);
-    //And the sprite using the texture
-    const sprite = PIXI.Sprite.from(tex);
-    this.sketch.stage.addChild(sprite); // this is the sketch.stage instance
-    this.sketch.renderer._update();  // this is the sketch.renderer instance
-    console.log("made it");
-  };
-
-  async add(uri) {
-    console.log("STATE: ", this.state.image);
-    var myUri = this.props.route.params.data.uri;
-    var img = new HTMLImageElement(myUri);
-    //we create a PIXI.Texture using the img
-    var tex = PIXI.Texture.from(img);
-    //And the sprite using the texture
-    const sprite = PIXI.Sprite.from(tex);
-    sprite.width = 500;
-    sprite.height = 500;
-    this.sketch.stage.addChild(sprite); // this is the sketch.stage instance
-    this.sketch.renderer._update();  // this is the sketch.renderer instance
-    console.log("made it");
-  }
 
   render() {
-    var uri = this.state.image;
+    const uri = this.state.image;
+    const oldUri = this.state.oldImage;
+    //console.log("OLD URI:", oldUri);
     return (
       <SafeAreaView style={styles.container}>
       <View style={{flex: 1}}>
       <ImageBackground 
         style={{height: 500}} 
-        source={{uri}} 
+        source={{uri: oldUri}} 
         resizeMode='contain'
       >
         <ExpoPixi.Sketch
@@ -95,21 +69,17 @@ export default class MarkProblem extends Component {
           onReady={this.onReady}
         />
       </ImageBackground>
-        <Button
-          color={'blue'}
-          title="undo"
-          style={styles.button}
+      </View>
+      <View style={{alignItems: 'center'}}>
+        <TouchableOpacity
+          style={styles.button3Style}
           onPress={() => {
             this.sketch.undo();
           }}
-        />
-        <Button
-          color={'blue'}
-          title="add"
-          style={styles.button}
-          onPress={() => this.add(uri)}
-        />
-      </View>
+        >
+        <Text style={styles.buttonTextStyle}>Undo</Text>
+        </TouchableOpacity>
+        </View>
       <Text></Text>
       <View style={{flexDirection:'row', paddingBottom:20, justifyContent:'center'}}>
             <TouchableOpacity
@@ -134,9 +104,9 @@ export default class MarkProblem extends Component {
           <View style={{alignItems: 'center'}}>
             <TouchableOpacity
                 style={styles.button2Style}
-                onPress={() => this.props.navigation.navigate('Finish Problem', {data: this.state.image})}
+                onPress={() => this.props.navigation.navigate('Finish Problem', {data: {image: this.state.image, oldImage:this.state.oldImage}})}
             >
-            <Text>Finished Marking</Text>
+            <Text style={styles.buttonTextStyle}>Finished Marking</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -166,6 +136,17 @@ const styles = StyleSheet.create({
     },
     button2Style: {
         backgroundColor: '#06D6A0',
+        height: 40,
+        width: '80%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    button3Style: {
+        backgroundColor: '#EF476F',
         height: 40,
         width: '80%',
         alignItems: 'center',

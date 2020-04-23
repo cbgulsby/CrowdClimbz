@@ -9,7 +9,8 @@ import {
   Picker,
   Image,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  ImageBackground
 } from 'react-native';
 import {NavigationActions} from 'react-navigation';
 import firebase from '../firebase';
@@ -119,7 +120,7 @@ export default function FinishProblem( {navigation, route}){
     		Alert.alert("You must specify what gym this problem is in to post it.");
     		return;
     	}
-    	uploadImage(data, currentUserUsername, problemName)
+    	uploadImage(data.image, currentUserUsername, problemName)
     		.then(() => {
     			console.log('Image uploaded successfully');
     		})
@@ -159,10 +160,15 @@ export default function FinishProblem( {navigation, route}){
 	return(
 		<SafeAreaView style={styles.container}>
 			<View style={{flexDirection:'row', paddingBottom: 20, marginLeft: 10}}>
+         	 	<ImageBackground
+         	 		style={{height:150, width:150}}
+         	 		source={{uri: data.oldImage}}
+         	 	>
          	 	<Image 
          	 		style={{height:150, width:150}}
-         	 		source={{ uri: data }} 
+         	 		source={{ uri: data.image }} 
          	 	/>
+         	 	</ImageBackground>
 				<TextInput
 					multiline
 	         	 	style={{height: 150, borderRadius: 5, width: 225, color:'#073B4C', paddingLeft: 10, paddingRight: 10, borderColor: '#073B4C', borderWidth: 2}}
