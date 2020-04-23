@@ -8,7 +8,8 @@ import {
   TextInput,
   Picker,
   Image,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native';
 import firebase from '../firebase';
 import * as ImagePicker from 'expo-image-picker';
@@ -162,18 +163,19 @@ export default function FinishProblem( {navigation, route}){
          	 		source={{ uri: data }} 
          	 	/>
 				<TextInput
-	         	 	style={{height: 150, width: 225, borderColor: 'gray', borderWidth: 2}}
+					multiline
+	         	 	style={{height: 150, borderRadius: 5, width: 225, color:'#073B4C', paddingLeft: 10, paddingRight: 10, borderColor: '#073B4C', borderWidth: 2}}
 	         		placeholder="Add description here!"
 	         		onChangeText={(text) => setDescription(text)}
 	        	/>
 	        </View>
-	        <View style={{paddingBottom: 20, marginLeft: 15, marginRight: 15}}>
+	        <View style={{paddingBottom: 20, marginLeft: 15, marginRight: 15, alignItems:'center'}}>
 	        	<TextInput
-	        		style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
+	        		style={{height: 40, borderRadius: 5,width: 350, color:'#073B4C', paddingLeft: 10, borderColor: '#073B4C', borderWidth: 2}}
 	        		placeholder="Problem Name: N/A"
 	        		onChangeText={(text) => setProblemName(text)}
 	        	/>
-	        	<Picker style={{borderColor: 'gray', borderWidth: 2}}
+	        	<Picker itemStyle={{color:'#073B4C'}} style={{borderColor: '#073B4C', borderWidth: 2}}
 	        		prompt='Choose Grade'
 	        		mode='dropdown'
 	        		selectedValue = {problemGrade}
@@ -199,7 +201,7 @@ export default function FinishProblem( {navigation, route}){
 	  			<Picker.Item label="V14" value="14" />
 	  			<Picker.Item label="V15" value="15" />
 	        	</Picker>
-	        	<Picker style={{borderColor: 'gray', borderWidth: 2}}
+	        	<Picker itemStyle={{color:'#073B4C'}} style={{borderColor: '#073B4C', borderWidth: 2}}
 	        		prompt='Choose Gym'
 	        		mode='dropdown'
 	        		selectedValue = {problemGym}
@@ -210,25 +212,38 @@ export default function FinishProblem( {navigation, route}){
 	  			>
 	  			{pickerList(gymChoices)}
 	  			</Picker>
-	        	<Button
-	        		title = "Can't find your gym? Add a new gym!"
-	        		style={{marginBottom: 20}}
+	        	<TouchableOpacity
+	        		style={{backgroundColor: '#06D6A0',
+				        height: 40,
+				        width: '90%',
+				        alignItems: 'center',
+				        justifyContent: 'center',
+				        margin: 5,
+				        borderWidth: 2,
+				        borderColor: '#073B4C',
+				        borderRadius: 5
+				    }}
 	        		onPress={() => navigation.navigate('Add Gym')}
-	        	/>
+	        	>
+	        	<Text style={styles.buttonTextStyle}>Can't find your gym? Add a new gym!</Text>
+	        	</TouchableOpacity>
 	        	<Text></Text>
-	        	<Button
-	        		title = "Add beta video"
-	        		style={{marginBottom: 20}}
+	        	<TouchableOpacity
+	        		style={styles.buttonStyle}
 	        		onPress={() => pickVideo()}
-	        	/>
+	        	>
+	        	<Text style={styles.buttonTextStyle}>Add Beta Video</Text>
+	        	</TouchableOpacity>
 	        	{problemVideoFlag == 1 &&
-	        		<Text>Video added!</Text>
+	        		<Text style={styles.buttonTextStyle}>Video added!</Text>
 	        	}
 	        	<Text></Text>
-	        	<Button
-	        		title = "Post Problem!"
+	        	<TouchableOpacity
+	        		style={styles.buttonStyle}
 	        		onPress={() => postProblem()}
-	        	/>
+	        	>
+	        	<Text style={styles.buttonTextStyle}>Post Problem!</Text>
+	        	</TouchableOpacity>
 			</View>
 		</SafeAreaView>
 	);
@@ -237,10 +252,25 @@ export default function FinishProblem( {navigation, route}){
 const styles = StyleSheet.create({
   container: {
       paddingTop: 24,
-      backgroundColor: '#4fb9ff',
+      backgroundColor: '#118AB2',
       flex: 1
   },
   rowContainer: {
   	flexDirection: 'row'
-  }
+  },
+   buttonStyle: {
+        backgroundColor: '#06D6A0',
+        height: 40,
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: '#073B4C'
+    }
 });

@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Button, 
   SafeAreaView,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import CapturePhoto from '../screens/CapturePhoto';
@@ -26,7 +27,9 @@ class ProblemScreen extends React.Component {
 
   
   pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync();
+      let result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true
+      });
       console.log(result);
 
       if (!result.cancelled) {
@@ -41,23 +44,29 @@ class ProblemScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={{paddingBottom:20}}>
-          <Button
-            title="Take a Photo"
+          <TouchableOpacity
+            style={styles.buttonStyle}
             onPress={() => this.props.navigation.navigate('Take Photo')}
-          />
+          >
+          <Text style={styles.buttonTextStyle}>Take a Photo</Text>
+          </TouchableOpacity>
         </View>
-        <View>
-          <Button
-            title="Choose Photo from Phone"
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            style={styles.buttonStyle}
             onPress={this.pickImage}
-          />
+          >
+          <Text style={styles.buttonTextStyle}>Choose Photo from Phone</Text>
+          </TouchableOpacity>
           {image &&
-            <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
+            <Image source={{ uri: image.uri }} style={{ width: 300, height: 300 }} />}
           {image &&
-            <Button 
-              title="Use this Photo"
-              onPress={() => this.props.navigation.navigate('Mark Problem', {data: image})} //FIXME!
-          />}
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => this.props.navigation.navigate('Mark Problem', {data: image})}
+          >
+          <Text style={styles.buttonTextStyle}>Use this Photo</Text>
+          </TouchableOpacity>}
         </View>
       </SafeAreaView>
     );
@@ -89,7 +98,23 @@ export default function Problem(){
 const styles = StyleSheet.create({
   container: {
       paddingTop: 24,
-      backgroundColor: '#4fb9ff',
+      backgroundColor: '#118AB2',
+      alignItems: 'center',
       flex: 1
-  }
+  },
+  buttonStyle: {
+        backgroundColor: '#06D6A0',
+        height: 80,
+        width: 250,
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 20,
+        color: '#073B4C'
+    }
 });

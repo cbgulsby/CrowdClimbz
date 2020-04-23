@@ -112,24 +112,32 @@ export default class MarkProblem extends Component {
       </View>
       <Text></Text>
       <View style={{flexDirection:'row', paddingBottom:20, justifyContent:'center'}}>
-            <Button
-              title="Start Hold"
+            <TouchableOpacity
+              style={styles.buttonStyle}
               onPress={() => this.setHoldType('startHold')}
-            />
-            <Button
-              title="Normal Hold"
+            >
+            <Text style={styles.buttonTextStyle}>Start Hold</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
               onPress={() => this.setHoldType('normalHold')}
-            />
-            <Button
-              title="Finish Hold"
+            >
+            <Text style={styles.buttonTextStyle}>Normal Hold</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
               onPress={() => this.setHoldType('finishHold')}
-            />
+            >
+            <Text style={styles.buttonTextStyle}>Finish Hold</Text>
+            </TouchableOpacity>
           </View>
-          <View>
-            <Button
-                title="Finished Marking"
+          <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+                style={styles.button2Style}
                 onPress={() => this.props.navigation.navigate('Finish Problem', {data: this.state.image})}
-              />
+            >
+            <Text>Finished Marking</Text>
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
     );
@@ -139,10 +147,36 @@ export default class MarkProblem extends Component {
 const styles = StyleSheet.create({
   container: {
       paddingTop: 24,
-      backgroundColor: '#4fb9ff',
+      backgroundColor: '#118AB2',
       flex: 1
   },
   sketch: {
     height: 500
-  }
+  },
+   buttonStyle: {
+        backgroundColor: '#06D6A0',
+        height: 40,
+        width: '30%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    button2Style: {
+        backgroundColor: '#06D6A0',
+        height: 40,
+        width: '80%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: '#073B4C'
+    }
 });

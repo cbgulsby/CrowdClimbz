@@ -8,7 +8,8 @@ import {
   TextInput,
   Picker,
   Image,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native';
 import firebase from '../firebase';
 console.disableYellowBox = true; 
@@ -55,11 +56,11 @@ export default function AddGym({navigation}){
 			return;
 		}
 		if(checkLatitude(latitude) == 1){
-			Alert.alert("Please enter latitude as a decimal number between -90 and 90.");
+			Alert.alert("Please enter latitude as a decimal number between -90 and 90. You can find this on Google Maps.");
 			return;
 		}
 		if(checkLongitude(longitude) == 1){
-			Alert.alert("Please enter longitude as a decimal number between -180 and 180.");
+			Alert.alert("Please enter longitude as a decimal number between -180 and 180. You can find this on Google Maps.");
 			return;
 		}
 		console.log(typeof(longitude));
@@ -86,44 +87,51 @@ export default function AddGym({navigation}){
 
 	return(
 		<SafeAreaView style={styles.container}>
-		<View>
+		<View style={{alignItems:'center'}}>
 			<TextInput
-	         	 	style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
+	         	 	style={styles.textInputStyle}
 	         		placeholder="Please enter the name of the gym."
 	         		onChangeText={(text) => setGymName(text)}
 	        	/>
+	        <Text></Text>
 	        <TextInput
-	         	 	style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
+	         	 	style={styles.textInputStyle}
 	         		placeholder="Please enter the state where the gym is located."
 	         		onChangeText={(text) => setGymState(text)}
 	        	/>
+	        <Text></Text>
 	        <TextInput
-	         	 	style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
+	         	 	style={styles.textInputStyle}
 	         		placeholder="Please enter the city where the gym is located."
 	         		onChangeText={(text) => setGymCity(text)}
 	        	/>
+	        <Text></Text>
 	        <TextInput
-	         	 	style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
-	         		placeholder="Please enter the exact latitude of the gym, a decimal in the range -90 to 90. This can be found in Google maps."
+	         	 	style={styles.textInputStyle}
+	         		placeholder="Please enter the exact latitude of the gym."
 	         		keyboardType = 'decimal-pad'
 	         		onChangeText={(text) => {
 	         			const lat = Number(text);
 	         			setLatitude(lat);}
 	         		}
 	        	/>
+	        <Text></Text>
 	        <TextInput
-	         	 	style={{height: 40, width: 350, borderColor: 'gray', borderWidth: 2}}
-	         		placeholder="Please enter the exact longitude of the gym, a decimal in the range -180 to 180."
+	         	 	style={styles.textInputStyle}
+	         		placeholder="Please enter the exact longitude of the gym."
 	         		keyboardType = 'decimal-pad'
 	         		onChangeText={(text) => {
 	         			const lon = Number(text);
 	         			setLongitude(lon);}
 	         		}
 	        	/>
-	        <Button
-	        	title = "Add Gym"
+	        <Text></Text>
+	        <TouchableOpacity
+	        	style={styles.buttonStyle}
 	        	onPress={() => addGymToDatabase()}
-	        	/>
+	        >
+	        <Text style={styles.buttonTextStyle}>Add Gym</Text>
+	        </TouchableOpacity>
 		</View>
 		</SafeAreaView>
 	);
@@ -132,10 +140,34 @@ export default function AddGym({navigation}){
 const styles = StyleSheet.create({
   container: {
       paddingTop: 24,
-      backgroundColor: '#4fb9ff',
+      backgroundColor: '#118AB2',
       flex: 1
   },
   rowContainer: {
   	flexDirection: 'row'
-  }
+  },
+  textInputStyle: {
+  	height: 40, 
+  	borderRadius: 5,
+  	width: 350, 
+  	color:'#073B4C', 
+  	paddingLeft: 10, 
+  	borderColor: '#073B4C', 
+  	borderWidth: 2
+  },
+  buttonStyle: {
+        backgroundColor: '#06D6A0',
+        height: 40,
+        width: '60%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 5,
+        borderWidth: 2,
+        borderColor: '#073B4C',
+        borderRadius: 5
+    },
+    buttonTextStyle: {
+        fontSize: 18,
+        color: '#073B4C'
+    }
 });
