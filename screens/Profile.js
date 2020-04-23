@@ -20,44 +20,7 @@ import ProblemList from '../components/ProblemList';
 
 const Stack = createStackNavigator();
 
-const sampleData = [
-    {
-        id: '1',
-        problemName: 'I Hate Mondays',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 2,
-    },
-    {
-        id: '2',
-        problemName: 'Going Up',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 0,
-    },
-    {
-        id: '3',
-        problemName: 'Going Down',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 5,
-    },
-    {
-        id: '4',
-        problemName: 'Bottomless Fries',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 3,
-    },
-    {
-        id: '5',
-        problemName: 'All Uphill From Here',
-        gymLocation: 'Birmingham Boulders',
-        problemLevel: 4,
-    },
-    {
-        id: '6',
-        problemName: 'Angry Monkeys',
-        gymLocation: 'High Point Birmingham',
-        problemLevel: 4,
-    },
-]
+
 
 function ProfileScreen({navigation}){
 
@@ -93,48 +56,8 @@ function ProfileScreen({navigation}){
 
     const ref = firebase.firestore().collection('problems');
 
-
-  // useEffect(() => {
-  //   setLoading(true)
-
-  //   return ref.onSnapshot(querySnapshot => {
-  //     const tempProblems = [];
-  //     querySnapshot.forEach(doc => {
-  //       const{
-  //         betaVideo,
-  //         date,
-  //         description,
-  //         grade,
-  //         gym,
-  //         inappropriateFlag,
-  //         name,
-  //         outOfDateFlag,
-  //         photo,
-  //         time,
-  //         user
-  //       } = doc.data();
-        
-  //       if (user == currentUserUsername){
-  //           tempProblems.push({
-  //             problemInfo: {
-  //                 gymName: gym,
-  //                 user: user,
-  //                 grade: grade,
-  //                 problemName: name,
-  //             },
-  //             key: doc.id
-  //           })
-  //       }
-
-  //     });
-  //     setProblems(tempProblems);
-  //     setLoading(false);
-  //   });
-  // }, []);
-
 if (flag)
 {
-
 
     dbh.collection("problems").where("user", "==", currentUserUsername).get().then(function(querySnapshot) {
         const tempProblems = [];
@@ -170,10 +93,7 @@ if (flag)
               setLoading(false);
             }
         });
-    
 }
-    //var user = dbh.collection('users').doc(currentUser.uid).data();
-    //var ability = dbh.collection('users').doc(currentUser.uid).get();
 
 
     return(

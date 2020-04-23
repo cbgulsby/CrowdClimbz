@@ -55,31 +55,7 @@ export default function ChangePreferredGym({navigation}){
             setMarkers(tempMarkers);
             setLoading(false);
         })
-        
-    
-  //   const ref = firebase.firestore().collection('SearchGymsCollection');
-
-  //   useEffect(() => {
-  //       //setLoading(true)
-  //       return ref.onSnapshot(querySnapshot => {
-  //         const tempMarkers = [];
-  //         querySnapshot.forEach(doc => {
-  //           const{
-  //             gymName,
-  //             location
-  //           } = doc.data();
-
-  //           tempMarkers.push({
-  //             problemInfo: {
-  //                 title: gymName
-  //             },
-  //             key: doc.id
-  //         })
-  //         });
-  //         setMarkers(tempMarkers);
-  //         //setLoading(false);
-  //       });
-  // }, []);   
+         
 
 
     function pickerList(pickerData) {

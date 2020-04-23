@@ -7,7 +7,7 @@ import {
     Image,
     FlatList,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 import ProblemCard from '../components/ProblemCard';
 import firebase from '../firebase';
@@ -29,7 +29,6 @@ export default function SavedProblems(){
             console.log("DOCUMENT DATA:", doc.data());
             setUserSavedProblems(doc.data().saved);
             console.log("Saved Problems: ", userSavedProblems);
-            //if (userSavedProblems.length() == 0) setView(1);
 
         }
         else {
@@ -47,7 +46,6 @@ export default function SavedProblems(){
   if (flag) {
 
     dbh.collection("problems").get().then(function(querySnapshot) {
-
       setLoading(true)
       const tempProblems = [];
         querySnapshot.forEach(doc => {
