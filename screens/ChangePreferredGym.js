@@ -30,32 +30,57 @@ export default function ChangePreferredGym({navigation}){
     //I want to build an array of all the gym names we currently have
     const [markers, setMarkers] = useState([]);
     const [isLoading, setLoading] = useState(false);
-        
-        //console.log("value: ", value.nativeEvent.text);
-        firebase.firestore().collection('SearchGymsCollection')
-        .get()
-        .then(function(querySnapshot) {
-            setLoading(true);
+      
+    useEffect(() => {
+        setLoading(true)
+        return firebase.firestore().collection('SearchGymsCollection').onSnapshot(querySnapshot => {
             setMarkers([]);
             let tempMarkers = [];
-            querySnapshot.forEach(function(doc, i) {
-                //let tempMarkers = [];
-                console.log(doc.id, " => ", doc.data(), "\n");
-                const {
-                    gymName,
-                    location
-                } = doc.data();
+          querySnapshot.forEach(doc => {
+            const{
+              gymName,
+              location,
+            } = doc.data();
+
+            tempMarkers.push({
+              
+                title: gymName,
+                key: doc.id
+
+            })
+          });
+          setMarkers(tempMarkers);
+          setLoading(false);
+        });
+    }, []);
+
+
+        // setLoading(true);
+            
+        // //console.log("value: ", value.nativeEvent.text);
+        // firebase.firestore().collection('SearchGymsCollection')
+        // .get()
+        // .then(function(querySnapshot) {
+            
+        //     querySnapshot.forEach(function(doc, i) {
+        //         //let tempMarkers = [];
+        //         console.log(doc.id, " => ", doc.data(), "\n");
+        //         const {
+        //             gymName,
+        //             location
+        //         } = doc.data();
     
-                tempMarkers.push({
-                    title: gymName,
-                    key: doc.id
-                })
-            });
-            console.log("tempMarkers =>", tempMarkers)
-            setMarkers(tempMarkers);
-            setLoading(false);
-        })
-         
+        //         tempMarkers.push({
+        //             title: gymName,
+        //             key: doc.id
+        //         })
+        //     });
+        //     console.log("tempMarkers =>", tempMarkers)
+        //     setMarkers(tempMarkers);
+        //     setLoading(false);
+        // })
+        //  }
+
 
 
     function pickerList(pickerData) {
@@ -67,6 +92,7 @@ export default function ChangePreferredGym({navigation}){
         <SafeAreaView style={styles.container}>
             <View>
                 
+
                 <Picker style={{borderColor: 'gray', borderWidth: 2}}
                 prompt='Choose Grade'
                 mode='dropdown'
