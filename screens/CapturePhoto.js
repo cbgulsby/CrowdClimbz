@@ -48,7 +48,7 @@ export default function CapturePhoto({navigation, route}){
 	return(
 		<SafeAreaView style={styles.container}>
       		<View>
-       			<Camera style={{ height: 500 }} type={type}
+       			<Camera style={{ height: 400 }} type={type}
        				ref={ref => {
        					camera = ref;
        				}}

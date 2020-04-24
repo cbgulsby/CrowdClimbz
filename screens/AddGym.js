@@ -37,7 +37,6 @@ export default function AddGym({navigation}){
 	const db = firebase.firestore();
 	const [city, setGymCity] = useState("");
 	const [gymName, setGymName] = useState("");
-	const [geoLocation, setGeoLocation] = useState();
 	const [gymState, setGymState] = useState("");
 	const [latitude, setLatitude] = useState(200);
 	const [longitude, setLongitude] = useState(200);
@@ -66,14 +65,12 @@ export default function AddGym({navigation}){
 		console.log(typeof(longitude));
 
 		const geo = new firebase.firestore.GeoPoint(latitude, longitude);
-		setGeoLocation(geo);
 		console.log(geo);
-		console.log(geoLocation);
 		
 		db.collection("SearchGymsCollection").add({
 			city: city,
 			gymName: gymName,
-			location: {geoLocation},
+			location: geo,
 			state: gymState
 		})
 		.then(function() {

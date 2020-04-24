@@ -1,4 +1,4 @@
-import Expo from 'expo';
+//import Expo from 'expo';
 import * as ExpoPixi from 'expo-pixi';
 import React, { Component, useRef } from 'react';
 import { 

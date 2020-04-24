@@ -12,10 +12,6 @@ import {
 } from 'react-native';
 
 
-
-
-
-
 export default function MarkProblem({navigation, route}){
 	const {data} = route.params;
 
@@ -60,13 +56,6 @@ export default function MarkProblem({navigation, route}){
          		/>
          	</View>
          	<View>
-           Color:
-            <select id="color">
-              <option value="#ff0099">Pink</option>
-              <option value="#f3f313">Yellow</option>
-              <option value="#0dd5fc">Blue</option>
-              <option value="#83f52c">Green</option>
-            </select>
          	 	<Button
          	 		title="Finished Marking"
         			onPress={() => navigation.navigate('Finish Problem', {data: data})}
