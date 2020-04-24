@@ -23,7 +23,7 @@ export default function PreviewPhoto({navigation, route}){
     	<SafeAreaView style={styles.container}>
         	<View>
          	 <Image 
-         	 style={{height: 500}}
+         	 style={{height: 400}}
          	 source={{ uri: data.uri }} 
            resizeMode='contain'
          	 />
