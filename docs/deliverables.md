@@ -30,5 +30,7 @@ title: Deliverables
 
 [Sprint 3 Presentation](https://docs.google.com/presentation/d/1tEMKcjSfdqJ5vh6MIGe-CKXheV21jIEZHxEz8Trab6U/edit?usp=sharing)
 
+[apk file](https://github.com/cbgulsby/CrowdClimbz/blob/master/docs/CrowdClimbz-4f2110fe02734b91b39cfe0b3c1a74dc-signed.apk)
+
 ---
 [Home](https://cbgulsby.github.io/CrowdClimbz/)
