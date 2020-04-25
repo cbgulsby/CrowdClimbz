@@ -7,6 +7,7 @@ CrowdClimbz differs from other applications currently on the market in that it o
 
 ## Project Video
 Click the picture below to watch our project video on YouTube!
+
 [![CrowdClimbzVideo](CrowdClimbzThumbnail.JPG)](https://youtu.be/UAgfljC3PlE)
 
 ## Deliverables
