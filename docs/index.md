@@ -6,7 +6,7 @@ CrowdClimbz is a mobile application that encourages and enables climbers to crea
 CrowdClimbz differs from other applications currently on the market in that it offers simple, streamlined features for marking projects, independent of the gym or rock wall used. It emphasizes sharing and commenting on others’ work rather than simply creating a bank of projects for oneself. We hope that this application will help new climbers who want to discover more projects at their level as well as seasoned climbers who are looking for more challenges. 
 
 ## Project Video
-[![](CrowdClimbzThumbnail.jpg)](https://youtu.be/UAgfljC3PlE)
+[![Video](CrowdClimbzThumbnail.jpg)](https://youtu.be/UAgfljC3PlE)
 
 ## Deliverables
 You can view the deliverables for our project [here](https://cbgulsby.github.io/CrowdClimbz/deliverables).
