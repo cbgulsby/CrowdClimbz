@@ -13,7 +13,7 @@ My name is Bailey Gulsby, and I am studying computer science at the University o
 
 ### William Harders
 <!-- ![Will](Will.JPG) -->
-<img src = "./Will.JPG" width = "200" height = "400">
+<img src = "./Will.png" width = "200" height = "400">
 
 I'm Will Harders and I am a senior student in the Capstone Computing course.  I am majoring in Computer Science and Mathematics and will be graduating this spring.  Outside of my classes, I love playing tennis as well as listening to music and playing video games.  I am hoping to go into Data Science or some other field that combines Computer Science and Mathematics post-graduation.  
 
